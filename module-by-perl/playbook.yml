@@ -1,0 +1,16 @@
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+  - name: debug
+    debug:
+      msg: hello
+
+  - name: create file
+    file:
+      path: /var/tmp/zzz
+      state: directory
+      mode: '0755'
+
+  - name: exec my module
+    mymodule:
