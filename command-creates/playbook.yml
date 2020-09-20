@@ -1,0 +1,25 @@
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+  # - name: command sample
+  #   command:
+  #     cmd: touch /tmp/curry-daisuki
+  #     creates: /tmp/curry-daisuki
+
+  # - name: mv file
+  #   command:
+  #     cmd: mv /tmp/zzz-src /tmp/zzz-dest
+  #     removes: /tmp/zzz-src
+  #     # creates: /tmp/zzz-dest
+
+  - name: mv file
+    shell: 
+      cmd: mv /tmp/zzz-src /tmp/zzz-dest
+      removes: /tmp/zzz-sr*
+      # creates: /tmp/zzz-dest
+
+  # - name: copy
+  #   copy:
+  #     src: /tmp/zzz-src
+  #     dest: /tmp/zzz-dest
