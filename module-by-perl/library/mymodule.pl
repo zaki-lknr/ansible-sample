@@ -1,5 +1,4 @@
 #!/usr/bin/perl
 
-# print '{"changed": true, "result": "🐰"}';
-print '{"failed": true, "result": "🐰"}';
-exit 1;
+print '{"changed": false, "result": "🐰"}';
+exit 0;
