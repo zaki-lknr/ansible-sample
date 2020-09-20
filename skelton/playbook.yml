@@ -1,0 +1,11 @@
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+  - name: command sample
+    command: ls
+    register: result_ls
+
+  - name: print result
+    debug:
+      msg: "{{ result_ls }}"
