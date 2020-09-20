@@ -1,0 +1,17 @@
+- hosts: docker
+  gather_facts: no
+
+  tasks:
+  - name: create directory
+    file:
+      path: /zzz
+      state: directory
+      mode: '0755'
+
+  - name: command sample
+    shell: hostname; ls -C /
+    register: result_ls
+
+  - name: print result
+    debug:
+      msg: "{{ result_ls }}"
