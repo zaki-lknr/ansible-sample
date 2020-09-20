@@ -1,4 +1,4 @@
 #!/usr/bin/perl
 
-print '{"changed": false}';
+print '{"changed": false, "result": "🐰"}';
 exit 0;
