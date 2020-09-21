@@ -1,0 +1,12 @@
+- hosts: eos
+  gather_facts: no
+
+  tasks:
+  - name: gather facts
+    eos_facts:
+      gather_subset: all
+    register: eosfacts
+
+  - debug:
+      msg: "{{eosfacts}}"
+

@@ -1,0 +1,14 @@
+# ansible_connection: docker
+ansible_connection: network_cli
+ansible_network_os: eos
+ansible_host: localhost
+ansible_port: 25022
+# ^^^ require: docker run -p 25022:22 ...
+ansible_user: lab-user
+ansible_password: p@ssword
+
+# ansible_user: ansible
+# ansible_password: p@ssword
+
+ansible_become: yes
+ansible_become_method: enable
