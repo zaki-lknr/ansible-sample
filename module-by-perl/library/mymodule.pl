@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+use strict;
+
+my $param_lines;
 while (<ARGV>) {
     $param_lines = $_;
 }
