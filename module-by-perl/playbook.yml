@@ -17,3 +17,7 @@
       param: foo
       state: present
       param2: hoge hoge
+      values:
+        - item1
+        - item2
+        - item3
