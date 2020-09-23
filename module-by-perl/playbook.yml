@@ -26,3 +26,5 @@
         mem: 8
         cpu: 8
         foo: bar
+      #failed: true
+      failed: false

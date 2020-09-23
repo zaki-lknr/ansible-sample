@@ -12,11 +12,15 @@ while (<ARGV>) {
 my $param = getval("param", $param_lines);
 my $values = getval("values", $param_lines);
 my $dicts = getval("dict", $param_lines);
+my $failed = getval("failed", $param_lines);
+
+# $failedにはtrue/false(boolのつもり)を入れるとTrue/Falseが入ってくる
+$failed = lc $failed;
 
 my $values_str = join(",", map { '"'.$_.'"' } @$values); # string arrayのreferenceを、カンマ区切り・ダブルクォート囲みの文字列変換
 my $dicts_str = '{' . join(",", map { '"'.$_.'": ' . '"' . $dicts->{$_} . '"'} keys %$dicts) . '}';
 
-print qq#{"changed": false, "result": "🐰", "param": "$param", "values": [ $values_str ], "dict": $dicts_str}#;
+print qq#{"failed": $failed, "changed": false, "result": "🐰", "param": "$param", "values": [ $values_str ], "dict": $dicts_str}#;
 exit 0;
 
 sub getval {
