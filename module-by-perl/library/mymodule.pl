@@ -11,10 +11,12 @@ while (<ARGV>) {
 
 my $param = getval("param", $param_lines);
 my $values = getval("values", $param_lines);
+my $dicts = getval("dict", $param_lines);
 
 my $values_str = join(",", map { '"'.$_.'"' } @$values); # string arrayのreferenceを、カンマ区切り・ダブルクォート囲みの文字列変換
+my $dicts_str = '{' . join(",", map { '"'.$_.'": ' . '"' . $dicts->{$_} . '"'} keys %$dicts) . '}';
 
-print qq#{"changed": false, "result": "🐰", "param": "$param", "values": [ $values_str ]}#;
+print qq#{"changed": false, "result": "🐰", "param": "$param", "values": [ $values_str ], "dict": $dicts_str}#;
 exit 0;
 
 sub getval {
@@ -38,6 +40,15 @@ sub getval {
             #     - item3
             # は、↓になる(連続シングルクォートは実際には1個)
             # values=''[''"''"''item1''"''"'', ''"''"''item2''"''"'', ''"''"''item3''"''"'']''
+        }
+        if ($data =~ /$key='\{(.*?)\}'/) {
+            # dict
+            my $item;
+            for (map { s#'"'"'##g; $_ } split /, /, $1) {
+                my ($k, $v) = split /: /;
+                $item->{$k} = $v;
+            }
+            return $item;
         }
     }
 
