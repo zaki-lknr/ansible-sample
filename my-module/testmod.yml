@@ -9,3 +9,8 @@
   - name: dump test output
     debug:
       msg: '{{ testout }}'
+
+  - module_base:
+      opt: fail me
+      state: present
+      changed: false
