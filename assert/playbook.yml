@@ -1,0 +1,25 @@
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+  - name: assert sample
+    vars:
+      hoge: "zzz"
+      foo: "bar"
+      baz: False
+    assert:
+      that:
+      - "hoge is defined"
+      - foo is defined
+      - baz is defined and baz
+
+    # ↑ bazは定義されているが評価するとfalseになるためassertは失敗する
+    # ansible-playbook で -e baz=hogehoge とか付与すれば通る
+
+  - name: command sample
+    command: ls
+    register: result_ls
+
+  - name: print result
+    debug:
+      msg: "{{ result_ls }}"
