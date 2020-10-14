@@ -1,0 +1,11 @@
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+  - name: trick or treat
+    vars:
+      trick: False
+      treat: False
+    debug:
+      msg: Happy Halloween
+    when: trick or treat
