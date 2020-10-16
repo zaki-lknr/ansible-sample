@@ -1,0 +1,10 @@
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+  - name: helm
+    community.kubernetes.helm:
+      name: mysql-sample
+      chart_ref: stable/mysql
+      release_namespace: db
+      create_namespace: true

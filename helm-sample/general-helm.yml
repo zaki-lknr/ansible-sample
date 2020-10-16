@@ -1,0 +1,32 @@
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+  - name: helm 2.9
+    helm:
+      host: localhost
+      chart:
+        name: mysql
+        source:
+          type: repo
+          location: https://kubernetes-charts.storage.googleapis.com
+      state: present
+      name: mysql-sample
+      namespace: default
+
+  # ※ 旧版helm (community.general.helm) は、対応してるのはHelm v2
+  # https://github.com/ansible/ansible/issues/61546
+  # host: localhost というのはTiller's server host
+
+  # - name: helm example
+  #   helm:
+  #     host: localhost
+  #     chart:
+  #       name: memcached
+  #       version: 0.4.0
+  #       source:
+  #         type: repo
+  #         location: https://kubernetes-charts.storage.googleapis.com
+  #     state: present
+  #     name: my-memcached
+  #     namespace: db
