@@ -1,0 +1,47 @@
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+  - name: Create a k8s namespace
+    community.kubernetes.k8s:
+      name: testing
+      api_version: v1
+      kind: Namespace
+      state: present
+
+  - name: Create a Deployment by reading the definition from a local file
+    community.kubernetes.k8s:
+      state: present
+      src: ./deployment.yaml
+
+  - name: Read definition template file from the Ansible controller file system
+    vars:
+      resourcename: tmpl-sample
+      namespace: testing
+      replica: 1
+    community.kubernetes.k8s:
+      state: present
+      template: './deployment.yaml.j2'
+
+  - name: Create a Service object from an inline definition
+    vars:
+      namespace: testing
+    community.kubernetes.k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: Service
+        metadata:
+          labels:
+            app: sample-http
+          name: sample-http
+          namespace: "{{ namespace }}"
+        spec:
+          ports:
+          - port: 80
+            protocol: TCP
+            targetPort: 80
+            name: http
+          selector:
+            app: sample-http
+          type: NodePort
