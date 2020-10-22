@@ -12,6 +12,7 @@
   - name: Create a Deployment by reading the definition from a local file
     community.kubernetes.k8s:
       state: present
+      namespace: testing
       src: ./deployment.yaml
 
   - name: Read definition template file from the Ansible controller file system

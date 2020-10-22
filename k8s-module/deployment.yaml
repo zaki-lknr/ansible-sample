@@ -4,7 +4,6 @@ metadata:
   labels:
     app: sample-http
   name: sample-http
-  namespace: testing
 spec:
   replicas: 2
   selector:
