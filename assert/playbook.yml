@@ -12,14 +12,12 @@
       - "hoge is defined"
       - foo is defined
       - baz is defined and baz
+    register: assert_result
+    ignore_errors: true
 
     # ↑ bazは定義されているが評価するとfalseになるためassertは失敗する
     # ansible-playbook で -e baz=hogehoge とか付与すれば通る
 
-  - name: command sample
-    command: ls
-    register: result_ls
-
   - name: print result
     debug:
-      msg: "{{ result_ls }}"
+      msg: "{{ assert_result }}"
