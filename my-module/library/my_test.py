@@ -72,7 +72,8 @@ def run_module():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         name=dict(type='str', required=True),
-        new=dict(type='bool', required=False, default=False)
+        new=dict(type='bool', required=False, default=False),
+        items=dict(type='list', elements='str', required=True)
     )
 
     # seed the result dict in the object
@@ -105,6 +106,7 @@ def run_module():
     # part where your module will do what it needs to do)
     result['original_message'] = module.params['name']
     result['message'] = 'goodbye'
+    result['items'] = module.params['items']
 
     # use whatever logic you need to determine whether or not this module
     # made any modifications to your target

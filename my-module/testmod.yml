@@ -5,6 +5,10 @@
     my_test:
       name: 'hello'
       new: true
+      items:
+        - foo
+        - bar
+        - baz
     register: testout
   - name: dump test output
     debug:
