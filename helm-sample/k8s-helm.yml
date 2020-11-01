@@ -2,9 +2,15 @@
   gather_facts: no
 
   tasks:
+  - name: Add default repository
+    community.kubernetes.helm_repository:
+      name: stable
+      repo_url: https://kubernetes-charts.storage.googleapis.com
+
   - name: helm
     community.kubernetes.helm:
       name: mysql-sample
+      update_repo_cache: true
       chart_ref: stable/mysql
       release_namespace: db
       create_namespace: true
