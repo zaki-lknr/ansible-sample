@@ -8,8 +8,12 @@
       chart_ref: stable/mysql
       release_namespace: db
       create_namespace: true
-      values_files:
-      - ./mysql-conf/values-service.yaml
+      # values_files:
+      # - ./mysql-conf/values-service.yaml
+      release_values:
+        service:
+          type: NodePort
+          port: 3306
     register: result
 
   - name: print result
