@@ -107,6 +107,7 @@ def run_module():
     result['original_message'] = module.params['name']
     result['message'] = 'goodbye'
     result['items'] = module.params['items']
+    result['items_type'] = str(type(module.params['items']))
 
     # use whatever logic you need to determine whether or not this module
     # made any modifications to your target
