@@ -73,7 +73,8 @@ def run_module():
     module_args = dict(
         name=dict(type='str', required=True),
         new=dict(type='bool', required=False, default=False),
-        items=dict(type='list', elements='str', required=True)
+        items=dict(type='list', elements='str', required=True),
+        dict_values=dict(type='dict')
     )
 
     # seed the result dict in the object
@@ -108,6 +109,8 @@ def run_module():
     result['message'] = 'goodbye'
     result['items'] = module.params['items']
     result['items_type'] = str(type(module.params['items']))
+    result['dict_values'] = str(type(module.params['dict_values']))
+    result['dict_values.key2'] = module.params['dict_values']['key2']
 
     # use whatever logic you need to determine whether or not this module
     # made any modifications to your target

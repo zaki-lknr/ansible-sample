@@ -9,6 +9,10 @@
         # - foo
         # - bar
         # - baz
+      dict_values:
+        key1: 123
+        key2: 456
+        key3: 789
     register: testout
   - name: dump test output
     debug:
