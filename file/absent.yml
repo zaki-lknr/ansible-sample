@@ -1,0 +1,23 @@
+- hosts: localhost
+  gather_facts: no
+  vars:
+    filepath: /tmp/hogehoge
+
+  tasks:
+  - name: create file
+    file:
+      path: '{{ filepath }}'
+      state: touch
+  # ↑作る
+  # ちなみに`touch`はタイムスタンプが更新されるので、再実行してもokにはならない
+  # ↓消す
+  - name: absent file
+    file:
+      path: '{{ filepath }}'
+      state: absent
+
+  - name: absent not-exist-file
+    file:
+      path: /tmp/zzz/zzz/zzz
+      state: absent
+    # "ok"になる
