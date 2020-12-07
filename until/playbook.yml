@@ -1,0 +1,17 @@
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+  - name: command sample
+    shell: ls '{{ item }}'
+    register: ls_result
+    until: ls_result.stdout == '{{ item }}'
+    with_items:
+    - ansible.cfg
+    - playbook.yml
+    - hoge
+  # カレントディレクトリに"hoge"が無い間は再実行
+
+  - name: print result
+    debug:
+      msg: "{{ ls_result }}"
