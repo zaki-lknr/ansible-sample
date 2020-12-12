@@ -1,0 +1,10 @@
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+  - name: git clone
+    ansible.builtin.git:
+      repo: https://github.com/zaki-lknr/usansible.git
+      dest: /home/zaki/tmp/dev-1.0.0
+      version: usansible-1.0.0
+    register: result
