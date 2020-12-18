@@ -1,0 +1,13 @@
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+  - name: get yaml file
+    command: cat yamlfile.yml
+    register: __result
+
+  - name: get yaml value from text
+    vars:
+      data: "{{ __result.stdout | from_yaml }}"
+    debug:
+      msg: '{{ data.spec.template.spec.containers[0].image }}'
