@@ -1,0 +1,11 @@
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+  - name: split filter sample
+    debug:
+      msg: "{{ item.split()[8] }}"
+    loop:
+      - "-rw-rw-r--. 1 zaki zaki  33 Sep 26 11:19 ansible.cfg"
+      - "-rw-rw-r--. 1 zaki zaki 330 Sep 26 00:05 playbook.yml"
+      - "-rw-rw-r--. 1 zaki zaki 546 Dec 19 13:32 split.yml"
