@@ -9,8 +9,10 @@
       - name: web2
         addr: 192.168.2.11
         mask: 255.255.255.0
+      - addr: 192.168.2.0
+        mask: 255.255.255.0
 
   tasks:
   - name: split filter sample
     debug:
-      msg: '{{ hosts | selectattr("name", "eq", "web1") }}'
+      msg: '{{ hosts | selectattr("name", "defined") | selectattr("name", "eq", "web1") }}'
