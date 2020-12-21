@@ -9,3 +9,14 @@
       - "-rw-rw-r--. 1 zaki zaki  33 Sep 26 11:19 ansible.cfg"
       - "-rw-rw-r--. 1 zaki zaki 330 Sep 26 00:05 playbook.yml"
       - "-rw-rw-r--. 1 zaki zaki 546 Dec 19 13:32 split.yml"
+
+  # splitでバラした指定カラムの値が特定の値であるかチェック
+  - name: check split data "eq"
+    assert:
+      that:
+        - "item.split()[0] == '-rw-rw-r--.'"
+        - "item.split()[2] == 'zaki'"
+    loop:
+      - "-rw-rw-r--. 1 zaki zaki  33 Sep 26 11:19 ansible.cfg"
+      - "-rw-rw-r--. 1 zaki zaki 330 Sep 26 00:05 playbook.yml"
+      - "-rw-rw-r--. 1 zaki zaki 546 Dec 19 13:32 split.yml"
