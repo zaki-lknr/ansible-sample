@@ -1,0 +1,12 @@
+- hosts: target
+  gather_facts: false
+
+  tasks:
+  - name: wait node ready
+    vars:
+      host_address: "{{ hostvars[item].ansible_host | default(hostvars[item].inventory_hostname) }}"
+    debug:
+      msg: "{{ host_address }}"
+    with_items:
+    - "{{ groups.target }}"
+    run_once: true
