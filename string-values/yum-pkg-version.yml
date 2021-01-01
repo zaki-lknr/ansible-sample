@@ -1,5 +1,10 @@
 - hosts: target
   gather_facts: no
+  vars:
+    pkg:
+      - kubeadm
+      - kubectl
+      - kubelet
 
   tasks:
   - name: print result
@@ -8,4 +13,11 @@
       #_kube_version: "{{ '-' + kube_version | default() }}" 
     debug:
       msg: "kubectl{{ _kube_version }}"
+
+  - name: list
+    vars:
+      _pkg: "{{ pkg | product([kube_version | default('*')]) | map('join', '-') | list}} "
+      #_kube_version: "{{ '-' + kube_version | default() }}"
+    debug:
+      msg: "{{ _pkg }}"
 
