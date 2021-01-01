@@ -1,0 +1,11 @@
+- hosts: target
+  gather_facts: no
+
+  tasks:
+  - name: print result
+    vars:
+      _kube_version: "-{{ kube_version | default('*') }}" 
+      #_kube_version: "{{ '-' + kube_version | default() }}" 
+    debug:
+      msg: "kubectl{{ _kube_version }}"
+
