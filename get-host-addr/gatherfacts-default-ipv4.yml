@@ -1,0 +1,10 @@
+- hosts: manager-hosts
+  gather_facts: true
+
+  tasks:
+  - name: print ansible_host
+    debug:
+      msg:
+        - "{{ ansible_host }}"
+        - "{{ inventory_hostname }}"
+        - "{{ ansible_facts.default_ipv4 }}"  # <- gather_facts: false だと参照不可
