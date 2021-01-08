@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  vars:
+    sample_value: 1
+
+  tasks:
+    - name: ternary sample
+      debug:
+        msg: "{{ (sample_value == 1) | ternary('sample_valueは1だよ', 'sample_valueは1じゃないよ') }}"
+      # やってることは (sample_value == 1) ? 'sample_valueは1だよ': 'sample_valueは1じゃないよ' と同じ
