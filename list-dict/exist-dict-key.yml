@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: sample
+      vars:
+        sample_val:
+          key1:
+            - item1
+            - item2
+            - item3
+          key2:
+            - foo
+            - bar
+            - baz
+      debug: 
+        msg:
+          - "{{ sample_val.key1 }}"
+          - "{{ sample_val.key2 }}"
+          - "{{ sample_val.key3 }}"
+      when:
+        - '"key1" in sample_val'
+        - '"key2" in sample_val'
+        - '"key3" in sample_val'
