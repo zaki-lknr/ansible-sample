@@ -3,10 +3,20 @@
   gather_facts: false
 
   vars:
-    sample_value: 1
+    sample_value: 2
 
   tasks:
     - name: ternary sample
       debug:
         msg: "{{ (sample_value == 1) | ternary('sample_valueは1だよ', 'sample_valueは1じゃないよ') }}"
       # やってることは (sample_value == 1) ? 'sample_valueは1だよ': 'sample_valueは1じゃないよ' と同じ
+
+    - name: ternary nest sample
+      debug:
+        msg: "{{ (sample_value == 1) |
+                    ternary('sample_valueは1だよ',
+                              (sample_value == 2) | ternary('sample_valueは2だよ', 'sample_valueは1でも2でもないよ')
+                            )
+              }}"
+        # 入れ子にしたternary()
+
