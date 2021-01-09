@@ -19,3 +19,12 @@
         - "{{ prompt_passwd }}"
     # vars_promptで入力させたデータは文字列。
     # 1 とか入れても文字列の'1'になる。
+
+  # - name: prompt at task
+  #   vars_prompt:
+  #   - name: task_prompt_value
+  #     prompt: input value
+  #     private: false
+  #   debug:
+  #     msg: "{{ task_prompt_value }}"
+  #   # task内のvars_promptはエラーになる
