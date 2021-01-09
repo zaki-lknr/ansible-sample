@@ -20,3 +20,13 @@
               }}"
         # 入れ子にしたternary()
 
+    - name: ternary nest sample
+      debug:
+        msg: "{{ (sample_value == 1) |
+                    ternary('sample_valueは1だよ', undefined) |
+                  default((sample_value == 2) |
+                           ternary('sample_valueは2だよ', 'sample_valueは1でも2でもないよ')
+                         )
+              }}"
+      # 入れ子にせずに、defaultフィルタを併用。ピタゴラスイッチ感。
+      # if-elsif-else っぽく見せるインデント難しい
