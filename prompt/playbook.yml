@@ -1,0 +1,21 @@
+- hosts: localhost
+  gather_facts: no
+
+  vars_prompt:
+  - name: prompt_value
+    prompt: input value
+    private: false
+
+  - name: prompt_passwd
+    prompt: input password
+    private: true
+    # privateを有効にするとローカルエコーしない
+
+  tasks:
+  - name: prinpt prompt value
+    debug:
+      msg:
+        - "{{ prompt_value }}"
+        - "{{ prompt_passwd }}"
+    # vars_promptで入力させたデータは文字列。
+    # 1 とか入れても文字列の'1'になる。
