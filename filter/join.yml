@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: join sample
+      vars:
+        sample_items:
+          - foo
+          - bar
+          - baz
+      debug:
+        msg: 
+          - "{{ sample_items }}"
+          - "{{ sample_items | join('<>') }}"
