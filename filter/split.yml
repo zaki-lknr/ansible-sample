@@ -20,3 +20,11 @@
       - "-rw-rw-r--. 1 zaki zaki  33 Sep 26 11:19 ansible.cfg"
       - "-rw-rw-r--. 1 zaki zaki 330 Sep 26 00:05 playbook.yml"
       - "-rw-rw-r--. 1 zaki zaki 546 Dec 19 13:32 split.yml"
+
+  - name: split
+    vars:
+      string: 'tokyo, yokohama, fukuoka'
+    debug:
+      msg:
+        - "split(','): {{ string.split(',') }}"
+        - "{{ string.split(',') | map('regex_replace', '^\\s*', '') }}"
