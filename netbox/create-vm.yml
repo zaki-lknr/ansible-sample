@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  vars:
+    netbox_url: http://192.168.0.19:28080/
+    netbox_token: 0123456789abcdef0123456789abcdef01234567
+
+  tasks:
+    - name: create vm sample
+      netbox.netbox.netbox_virtual_machine:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ item }}"
+          cluster: vm network
+          virtual_machine_role: k8s-node
+      with_items:
+        - k8s-master01
+        - k8s-master02
+        - k8s-master03
+        - k8s-worker01
+        - k8s-worker02
