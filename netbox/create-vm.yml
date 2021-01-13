@@ -21,3 +21,17 @@
         - k8s-master03
         - k8s-worker01
         - k8s-worker02
+
+    - name: create intarface each vm
+      netbox.netbox.netbox_vm_interface:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          virtual_machine: "{{ item }}"
+          name: ens192
+      with_items:
+        - k8s-master01
+        - k8s-master02
+        - k8s-master03
+        - k8s-worker01
+        - k8s-worker02
