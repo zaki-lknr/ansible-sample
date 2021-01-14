@@ -61,3 +61,29 @@
         - vm: k8s-worker02
           address: 192.168.0.126/24
           interface: ens192
+
+    - name: update vm primary_ip4
+      netbox.netbox.netbox_virtual_machine:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ item.vm }}"
+          cluster: vm network
+          virtual_machine_role: k8s-node
+          primary_ip4: "{{ item.address }}"
+      with_items:
+        - vm: k8s-master01
+          address: 192.168.0.121/24
+          interface: ens192
+        - vm: k8s-master02
+          address: 192.168.0.122/24
+          interface: ens192
+        - vm: k8s-master03
+          address: 192.168.0.123/24
+          interface: ens192
+        - vm: k8s-worker01
+          address: 192.168.0.125/24
+          interface: ens192
+        - vm: k8s-worker02
+          address: 192.168.0.126/24
+          interface: ens192
