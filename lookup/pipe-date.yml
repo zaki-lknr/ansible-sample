@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: get date
+    vars:
+      current_date: "{{ lookup('pipe', 'date +%Y/%m/%d_%H:%M:%S') }}"
+      # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/pipe_lookup.html
+      # pipeを使うとコマンド実行結果を取得できる
+
+    debug:
+      msg:
+      - "{{ current_date }}"
