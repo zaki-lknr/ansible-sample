@@ -1,6 +1,7 @@
 ---
 - hosts: localhost
-  gather_facts: false
+  gather_facts: true
+  gather_subset: min
 
   tasks:
   - name: get date
@@ -12,3 +13,6 @@
     debug:
       msg:
       - "{{ current_date }}"
+
+  - debug:
+      msg: "{{ ansible_date_time }}"
