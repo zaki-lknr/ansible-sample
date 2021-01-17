@@ -1,0 +1,24 @@
+- hosts: localhost
+  gather_facts: no
+  vars:
+    filepath: /tmp/hogehoge
+
+  tasks:
+  - name: create file
+    copy:
+      dest: '{{ filepath }}'
+      content: |
+        #   Server Certificate:
+        # Point SSLCertificateFile at a PEM encoded certificate.  If
+        # the certificate is encrypted, then you will be prompted for a
+        #
+        SSLCertificateFile /etc/pki/tls/certs/localhost.crt
+        SSLCertificateKeyFile /etc/pki/tls/private/localhost.key
+        #SSLCertificateChainFile /etc/pki/tls/certs/server-chain.crt
+
+  - name: replace strings
+    replace:
+      path: "{{ filepath }}"
+      regexp: ^SSLCertificateFile.*
+      replace: SSLCertificateFile /path/to/file.crt
+    # replaceはregexpでマッチした部分のみを置換するので、行全体を表す場合はregexpには^から$まで書く
