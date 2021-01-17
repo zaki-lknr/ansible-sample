@@ -11,8 +11,16 @@
 
   - name: install httpd
     yum:
-      name: httpd
+      name:
+        - httpd
+        - mod_ssl
       state: present
+
+  # - name: enable ssl
+  #   community.general.apache2_module:
+  #     state: present
+  #     name: ssl
+  # ^^^ require "a2enmod" but not found on yum/rpm linux
 
   - name: permit traffic in default zone for https/http
     ansible.posix.firewalld:
@@ -27,4 +35,4 @@
   - name: start httpd
     service:
       name: httpd
-      state: started
+      state: restarted
