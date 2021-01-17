@@ -22,6 +22,64 @@
   #     name: ssl
   # ^^^ require "a2enmod" but not found on yum/rpm linux
 
+  - name: create directory
+    file:
+      state: directory
+      path: "/etc/pki/tls/certs/{{ server_fqdn }}"
+
+  - name: create account private key
+    community.crypto.openssl_privatekey:
+      path: "/etc/pki/tls/certs/{{ server_fqdn }}/account.key"
+
+  - name: create server key
+    community.crypto.openssl_privatekey:
+      path: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.key"
+
+  - name: create csr
+    community.crypto.openssl_csr:
+      path: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.csr"
+      privatekey_path: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.key"
+      common_name: "{{ server_fqdn }}"
+
+  - name: Create a challenge for {{ server_fqdn }} using a account key file.
+    community.crypto.acme_certificate:
+      account_key_src: "/etc/pki/tls/certs/{{ server_fqdn }}/account.key"
+      account_email: "{{ email }}"
+      csr: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.csr"
+      dest: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.crt"
+      #acme_directory: https://acme-v01.api.letsencrypt.org/directory    ### 403 error
+      acme_directory: https://acme-v02.api.letsencrypt.org/directory
+      acme_version: 2
+      terms_agreed: true
+      # Renew if the certificate is at least 30 days old
+      remaining_days: 60
+    register: acme_challenge
+
+  - name: dump acme_challenge
+    debug:
+      msg: "{{ acme_challenge }}"
+
+  - name: create challenge path
+    file:
+      state: directory
+      path: "/var/www/html/{{ acme_challenge['challenge_data'][server_fqdn]['http-01']['resource'] | dirname }}"
+
+  - name: create challenge data to server
+    copy:
+      dest: "/var/www/html/{{ acme_challenge['challenge_data'][server_fqdn]['http-01']['resource'] }}"
+      content: "{{ acme_challenge['challenge_data'][server_fqdn]['http-01']['resource_value'] }}"
+    when: acme_challenge is changed and server_fqdn in acme_challenge['challenge_data']
+
+  - name: Let the challenge be validated and retrieve the cert and intermediate certificate
+    community.crypto.acme_certificate:
+      acme_directory: https://acme-v02.api.letsencrypt.org/directory
+      acme_version: 2
+      terms_agreed: true
+      account_key_src: "/etc/pki/tls/certs/{{ server_fqdn }}/account.key"
+      csr: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.csr"
+      dest: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.crt"
+      data: "{{ acme_challenge }}"
+
   - name: permit traffic in default zone for https/http
     ansible.posix.firewalld:
       service: "{{ item }}"
