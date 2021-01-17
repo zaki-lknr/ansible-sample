@@ -1,0 +1,30 @@
+---
+- hosts: all
+  #gather_facts: true
+  gather_facts: false
+  become: true
+
+  tasks:
+  - name: debug
+    debug:
+      msg: start ansible!
+
+  - name: install httpd
+    yum:
+      name: httpd
+      state: present
+
+  - name: permit traffic in default zone for https/http
+    ansible.posix.firewalld:
+      service: "{{ item }}"
+      permanent: true
+      immediate: true
+      state: enabled
+    with_items:
+      - https
+      - http
+
+  - name: start httpd
+    service:
+      name: httpd
+      state: started
