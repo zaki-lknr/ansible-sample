@@ -80,6 +80,17 @@
       dest: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.crt"
       data: "{{ acme_challenge }}"
 
+  - name: replace ssl.conf configure
+    replace:
+      path: /etc/httpd/conf.d/ssl.conf
+      regexp: "^{{ item.key }}.*"
+      replace: "{{ item.key }} {{ item.file }}"
+    with_items:
+      - key: SSLCertificateFile
+        file: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.crt"
+      - key: SSLCertificateKeyFile
+        file: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.key"
+
   - name: permit traffic in default zone for https/http
     ansible.posix.firewalld:
       service: "{{ item }}"
