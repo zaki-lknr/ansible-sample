@@ -7,6 +7,9 @@
   - name: this is post_tasks
     debug:
       msg: gochisousama desita.
+  - name: exec at post_task
+    command: ls
+    notify: post_notify
 
   tasks:
   - name: this task by "tasks" in playbook
@@ -30,9 +33,27 @@
     debug:
       msg: handler at task
     listen: task_notify
+  - name: pre_notify
+    debug:
+      msg: handler at pre_notify
+    listen: pre_notify
+  - name: post_notify
+    debug:
+      msg: handler at post_notify
+    listen: post_notify
+  - name: all notify task
+    debug:
+      msg: curry!
+    listen:
+    - task_notify
+    - pre_notify
+    - post_notify
 
   # pre_tasksは記述位置に関係なく、rolesより先に処理される
   pre_tasks:
   - name: this is pre_tasks
     debug:
       msg: itadakimasu
+  - name: exec at pre_task
+    command: ls
+    notify: pre_notify
