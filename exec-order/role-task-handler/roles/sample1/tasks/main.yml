@@ -1,0 +1,8 @@
+- name: sample 1
+  command: ls
+  register: result
+  notify: exec_command
+
+- name: print
+  debug:
+    msg: "{{ result.stdout }}"

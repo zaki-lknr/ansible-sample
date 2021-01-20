@@ -1,0 +1,26 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  roles:
+  - sample1
+  - sample2
+
+  ### この時の処理順は以下の通り。(sample1のtask/handler -> sample2 ではない)
+  # sample1
+  #   task1
+  #   task2
+  # sample2
+  #   task1
+  #   task2
+  # sample1
+  #   handler
+
+  ### tasksでimport_roleを使っても同様
+  # tasks:
+  # - import_role:
+  #     name: sample1
+
+  # - import_role:
+  #     name: sample2
+
