@@ -1,0 +1,8 @@
+---
+- name: curry tabetai
+  debug:
+    msg: curry tabetai
+
+- name: exec ls
+  command: ls
+  

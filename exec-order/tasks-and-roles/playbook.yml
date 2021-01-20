@@ -1,0 +1,26 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: this task by "tasks" in playbook
+    debug:
+      msg: hello
+  - name: exec at task
+    command: ls
+    notify: task_notify
+
+  # tasksとrolesが両方ある場合は、記述の順序に関係なく roles -> tasks の順に処理される
+  # https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html
+  roles:
+  - sample1
+  - sample2
+
+  # その際、handlersの処理は、roles内のtasksおよびplayのtasks全て処理が終わったあとにhandlerの処理になる
+  # (明記はされてないが、ここでもrolesのhandler -> taskのhandler)
+
+  handlers:
+  - name: handler_at_task
+    debug:
+      msg: handler at task
+    listen: task_notify

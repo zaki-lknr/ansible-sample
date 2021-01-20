@@ -1,0 +1,5 @@
+---
+- name: hander exec
+  debug:
+    msg: hello world
+  listen: exec_command
