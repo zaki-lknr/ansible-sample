@@ -37,3 +37,13 @@
   - name: print value by pause+prompt
     debug:
       msg: "{{ pause_prompt }}"
+
+  - name: prompt at task
+    pause:
+      prompt: input passwd
+      echo: false
+    register: pause_prompt_passwd
+
+  - name: print value by pause+prompt
+    debug:
+      msg: "{{ pause_prompt_passwd.user_input }}"
