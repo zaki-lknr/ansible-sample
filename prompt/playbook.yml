@@ -28,3 +28,12 @@
   #   debug:
   #     msg: "{{ task_prompt_value }}"
   #   # task内のvars_promptはエラーになる
+
+  - name: prompt at task
+    pause:
+      prompt: input value
+    register: pause_prompt
+
+  - name: print value by pause+prompt
+    debug:
+      msg: "{{ pause_prompt }}"
