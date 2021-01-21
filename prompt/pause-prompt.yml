@@ -1,0 +1,20 @@
+- hosts: servers
+  gather_facts: no
+
+  tasks:
+  - name: prompt at task
+    ansible.builtin.pause:
+      prompt: input value
+    register: pause_prompt
+
+    # 入力待ちになるのは1台のみっぽい
+    # 暗黙の run_once: true が設定されてるような感じ
+    # registerを使わなければ「enter押下までtask一時停止」という動きを満たす。
+    # registerにセットされるのは、このtaskが動くターゲットのみ。
+    # よってregisterされる変数を持つのはそのホストのみ。
+
+  - name: print value by pause+prompt
+    debug:
+      msg: hello
+
+    # registerにセットされた値を持つホスト以外は pause_prompt 変数がないので注意
