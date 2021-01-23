@@ -1,0 +1,208 @@
+---
+- hosts: localhost
+
+  tasks:
+    - name: combine example
+      debug:
+        msg: "{{ {'a':1, 'b':2} | combine({'b':3}) }}"
+    ## result:
+    ##   msg:
+    ##     a: 1
+    ##     b: 3
+
+    # - name: combine example
+    #   vars:
+    #     a:
+    #       - 1
+    #       - 2
+    #     b:
+    #       - 10
+    #       - 20
+    #     c:
+    #       - 100
+    #       - 200
+    #       - 300
+    #   debug:
+    #     msg: "{{ a | combine(b, c) }}"
+    ## result:
+    ## msg: |-
+    ##   failed to combine variables, expected dicts but got a 'int' and a 'int':
+    ##   200
+    ##   300
+    # intだとダメってかdictじゃないとダメか
+    # stringだと以下
+    # failed to combine variables, expected dicts but got a 'AnsibleUnicode' and a 'AnsibleUnicode':
+
+    - name: combine example
+      vars:
+        a:
+          key: val
+          foo: bar
+        b:
+          key: new-val
+          key1: val1
+        c:
+          key1: new-val1
+      debug:
+        msg: "{{ a | combine(b, c) }}"
+
+    - name: recursive
+      vars:
+        default:
+          a:
+            x: default
+            y: default
+          b: default
+          c: default
+        patch:
+          a:
+            y: patch
+            z: patch
+          b: patch
+      debug:
+        msg:
+          - "{{ default | combine(patch, recursive=True) }}"
+          - "{{ default | combine(patch) }}"
+      ### result
+      ### 以下の通り。recursiveが有効の場合、aの要素もマージされる(無効だとaの中身は単純に上書き)
+      # msg:
+      # - a:
+      #     x: default
+      #     y: patch
+      #     z: patch
+      #   b: patch
+      #   c: default
+      # - a:
+      #     y: patch
+      #     z: patch
+      #   b: patch
+      #   c: default
+
+    - name: list merge = keep
+      vars:
+        default:
+          a:
+            - default
+            - hoge
+        patch:
+          a:
+            - patch
+        # default:
+        #   a:
+        #     x: default
+        #     y: default
+        #   b: default
+        #   c: default
+        # patch:
+        #   a:
+        #     y: patch
+        #     z: patch
+        #   b: patch
+        # 要素がリストじゃなくてdictの場合は上書きされた。よくわからん
+      debug:
+        msg:
+          - "{{ default | combine(patch) }}"
+          - "{{ default | combine(patch, list_merge='keep') }}"
+      # msg:
+      # - a:
+      #   - patch
+      # - a:
+      #   - default
+      #   - hoge
+
+    - name: list merge = append
+      vars:
+        default:
+          a:
+            - default
+            - hoge
+        patch:
+          a:
+            - patch
+        # default:
+        #   - default
+        #   - hoge
+        # patch:
+        #   - patch
+        ## これはやっぱりダメ
+      debug:
+        msg:
+          - "{{ default | combine(patch) }}"
+          - "{{ default | combine(patch, list_merge='append') }}"
+      ### result
+      # ok: [localhost] => 
+      #   msg:
+      #   - a:
+      #     - patch
+      #   - a:
+      #     - default
+      #     - hoge
+      #     - patch
+
+    - name: list merge = prepend
+      vars:
+        default:
+          a:
+            - default
+            - hoge
+        patch:
+          a:
+            - patch
+      debug:
+        msg:
+          - "{{ default | combine(patch) }}"
+          - "{{ default | combine(patch, list_merge='prepend') }}"
+      ### result
+      # ok: [localhost] => 
+      #   msg:
+      #   - a:
+      #     - patch
+      #   - a:
+      #     - patch
+      #     - default
+      #     - hoge
+
+    - name: list merge = append_rp
+      vars:
+        default:
+          a:
+            - 1
+            - 1
+            - 2
+            - 3
+        patch:
+          a:
+            - 3
+            - 4
+            - 5
+            - 5
+      debug:
+        msg:
+          - "{{ default | combine(patch) }}"
+          - "{{ default | combine(patch, list_merge='append') }}"
+          - "{{ default | combine(patch, list_merge='append_rp') }}"
+      ### result
+      # ok: [localhost] => 
+      #   msg:
+      #   - a:
+      #     - 3
+      #     - 4
+      #     - 5
+      #     - 5
+      #   - a:
+      #     - 1
+      #     - 1
+      #     - 2
+      #     - 3
+      #     - 3
+      #     - 4
+      #     - 5
+      #     - 5
+      #   - a:
+      #     - 1
+      #     - 1
+      #     - 2
+      #     - 3
+      #     - 4
+      #     - 5
+      #     - 5
