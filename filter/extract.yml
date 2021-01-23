@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  tasks:
+
+    - name: get list by extract
+      vars:
+        list: ['a', 'b', 'c', 'd', 'e']
+        pickup: [2,4]
+      debug:
+        msg: "{{ pickup | map('extract', list) }}"
+      ### result:
+      # msg:
+      # - c
+      # - e
