@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+
+  # fatal: [localhost]: FAILED! => 
+  #   msg: You need to install "jc" prior to running jc filter
+  # require:
+  #    pip install jc
+
+  tasks:
+    - name: jc parser
+      vars:
+        # result: "{{ lookup('pipe', 'ps') }}"
+        result: "{{ lookup('pipe', 'ps aux') }}"
+      debug:
+        msg: "{{ result | community.general.jc('ps') }}"
+    # filter種別はこちら
+    # https://github.com/kellyjonbrazil/jc#parsers
