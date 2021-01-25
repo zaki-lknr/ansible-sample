@@ -7,6 +7,9 @@
     netbox_token: 0123456789abcdef0123456789abcdef01234567
 
     cluster: vm network
+    cluster_type:
+      name: ESXi
+      slug: esxi
     virtual_machines:
       - vm: k8s-master01
         vm_role: k8s-node
@@ -34,6 +37,22 @@
         interface: ens192
 
   tasks:
+    - name: create cluster-type
+      netbox.netbox.netbox_cluster_type:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ cluster_type.name }}"
+          slug: "{{ cluster_type.slug }}"
+
+    - name: create cluster
+      netbox.netbox.netbox_cluster:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ cluster }}"
+          cluster_type: "{{ cluster_type }}"
+
     - name: create vm sample
       netbox.netbox.netbox_virtual_machine:
         netbox_url: "{{ netbox_url }}"
