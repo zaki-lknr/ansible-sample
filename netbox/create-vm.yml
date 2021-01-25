@@ -6,35 +6,52 @@
     netbox_url: http://192.168.0.19:28080/
     netbox_token: 0123456789abcdef0123456789abcdef01234567
 
+    cluster: vm network
+    virtual_machines:
+      - vm: k8s-master01
+        vm_role: k8s-node
+        address: 192.168.0.121/24
+        interface: ens192
+      - vm: k8s-master02
+        vm_role: k8s-node
+        address: 192.168.0.122/24
+        interface: ens192
+      - vm: k8s-master03
+        vm_role: k8s-node
+        address: 192.168.0.123/24
+        interface: ens192
+      - vm: k8s-worker01
+        vm_role: k8s-node
+        address: 192.168.0.125/24
+        interface: ens192
+      - vm: k8s-worker02
+        vm_role: k8s-node
+        address: 192.168.0.126/24
+        interface: ens192
+      - vm: registry
+        vm_role: server
+        address: 192.168.0.21/24
+        interface: ens192
+
   tasks:
     - name: create vm sample
       netbox.netbox.netbox_virtual_machine:
         netbox_url: "{{ netbox_url }}"
         netbox_token: "{{ netbox_token }}"
         data:
-          name: "{{ item }}"
-          cluster: vm network
-          virtual_machine_role: k8s-node
-      with_items:
-        - k8s-master01
-        - k8s-master02
-        - k8s-master03
-        - k8s-worker01
-        - k8s-worker02
+          name: "{{ item.vm }}"
+          cluster: "{{ cluster }}"
+          virtual_machine_role: "{{ item.vm_role }}"
+      with_items: "{{ virtual_machines }}"
 
     - name: create intarface each vm
       netbox.netbox.netbox_vm_interface:
         netbox_url: "{{ netbox_url }}"
         netbox_token: "{{ netbox_token }}"
         data:
-          virtual_machine: "{{ item }}"
-          name: ens192
-      with_items:
-        - k8s-master01
-        - k8s-master02
-        - k8s-master03
-        - k8s-worker01
-        - k8s-worker02
+          virtual_machine: "{{ item.vm }}"
+          name: "{{ item.interface }}"
+      with_items: "{{ virtual_machines }}"
 
     - name: create ip address and assign
       netbox.netbox.netbox_ip_address:
@@ -45,22 +62,7 @@
           assigned_object:
             name: "{{ item.interface }}"
             virtual_machine: "{{ item.vm }}"
-      with_items:
-        - vm: k8s-master01
-          address: 192.168.0.121/24
-          interface: ens192
-        - vm: k8s-master02
-          address: 192.168.0.122/24
-          interface: ens192
-        - vm: k8s-master03
-          address: 192.168.0.123/24
-          interface: ens192
-        - vm: k8s-worker01
-          address: 192.168.0.125/24
-          interface: ens192
-        - vm: k8s-worker02
-          address: 192.168.0.126/24
-          interface: ens192
+      with_items: "{{ virtual_machines }}"
 
     - name: update vm primary_ip4
       netbox.netbox.netbox_virtual_machine:
@@ -68,22 +70,7 @@
         netbox_token: "{{ netbox_token }}"
         data:
           name: "{{ item.vm }}"
-          cluster: vm network
-          virtual_machine_role: k8s-node
+          cluster: "{{ cluster }}"
+          virtual_machine_role: "{{ item.vm_role }}"
           primary_ip4: "{{ item.address }}"
-      with_items:
-        - vm: k8s-master01
-          address: 192.168.0.121/24
-          interface: ens192
-        - vm: k8s-master02
-          address: 192.168.0.122/24
-          interface: ens192
-        - vm: k8s-master03
-          address: 192.168.0.123/24
-          interface: ens192
-        - vm: k8s-worker01
-          address: 192.168.0.125/24
-          interface: ens192
-        - vm: k8s-worker02
-          address: 192.168.0.126/24
-          interface: ens192
+      with_items: "{{ virtual_machines }}"
