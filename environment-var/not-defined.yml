@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  # - name: print ansible_env
+  #   debug:
+  #     msg: "{{ ansible_env }}"
+
+  - name: print pipe env
+    debug:
+      msg: "{{ lookup('env', 'zzz') }}"
+    when:
+      - lookup('env', 'zzz')
+    # whenでlookup('env')すると環境変数未定義の場合はskipになる
+
+  - name: delete
+    file:
+      path: "{{ lookup('env', 'zzz') }}"
+      state: absent
+    # 環境変数に設定されてるパスのファイルを削除の際、環境変数が未定義の場合は"ok"になる
+
+  # - name: delete
+  #   file:
+  #     path: "{{ zzzzzz }}"
+  #     state: absent
+  ### 通常の変数の場合は、変数参照時に未定義エラー
