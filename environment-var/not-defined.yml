@@ -25,3 +25,10 @@
   #     path: "{{ zzzzzz }}"
   #     state: absent
   ### 通常の変数の場合は、変数参照時に未定義エラー
+
+  - name: assert
+    assert:
+      that:
+        - lookup('env', 'zzz') | length() > 0
+    # 未定義の場合と空文字が定義されている場合の区別は付けられないが、
+    # 未定義または空文字をエラーにしたい場合はlengthでチェック
