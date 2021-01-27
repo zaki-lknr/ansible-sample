@@ -6,3 +6,8 @@
   tasks:
     - name: ping
       ping:
+
+    - name: print ansible_play_hosts_all
+      debug:
+        msg: "{{ ansible_play_hosts_all }}"
+      run_once: true
