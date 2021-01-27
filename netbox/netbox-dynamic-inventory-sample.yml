@@ -1,0 +1,8 @@
+---
+- name: dynamic inventory sample
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: ping
+      ping:
