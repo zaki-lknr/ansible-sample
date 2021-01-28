@@ -1,6 +1,6 @@
 ---
 - name: dynamic inventory sample
-  hosts: cluster_vm_network
+  hosts: cluster_vm_network:&device_roles_server
   gather_facts: false
 
   tasks:
