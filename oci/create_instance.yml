@@ -21,13 +21,47 @@
   - set_fact:
       availability_domains: "{{ result.availability_domains }}"
 
+
+  - name: Create VCN
+    oci_network_vcn:
+      compartment_id: "{{ instance_compartment }}"
+      cidr_block: "10.0.0.0/16"
+    register: result
+  - set_fact:
+      vcn_id: "{{ result.vcn.id }}"
+
+  - name: Create Route Table
+    # https://github.com/oracle/oci-ansible-collection/blob/master/docs/collections/oracle/oci/oci_network_route_table_module.rst
+    oci_network_route_table:
+      compartment_id: "{{ instance_compartment }}"
+      # name: route_sample  # name未指定だとデフォルトのルートテーブルになるっぽい？
+    register: result
+  - set_fact:
+      rt_id: "{{ result.route_table.id }}"
+
+  - name: Create a subnet
+    # https://github.com/oracle/oci-ansible-collection/blob/master/docs/collections/oracle/oci/oci_network_subnet_module.rst
+    oci_network_subnet:
+      display_name: subnet_sample
+      cidr_block: 10.0.2.0/24
+      availability_domain: "{{ availability_domains[0].name }}"
+      compartment_id: "{{ instance_compartment }}"
+      route_table_id: "{{ rt_id }}"
+      vcn_id: "{{ vcn_id }}"
+    register: result
+  - set_fact:
+      instance_subnet_id: "{{ result.subnet.id }}"
+
+
   - name: create instance
     oci_compute_instance:
       display_name: sample_instance1
       availability_domain: "{{ availability_domains[0].name }}"
       compartment_id: "{{ instance_compartment }}"
       shape: VM.Standard.E2.1.Micro
+      create_vnic_details:
+        subnet_id: "{{ instance_subnet_id }}"
     register: result
     # TASK [create instance] ***********************************************************************************************************************
     # fatal: [localhost]: FAILED! => changed=false 
-    #   msg: 'Invalid subnet: null'
+    #   msg: 'Invalid imageId: null'
