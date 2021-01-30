@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - vars:
+        foo:
+          bar-baz:
+            qux:
+              - xxx
+              - yyy
+              - zzz
+      debug:
+        # msg: "{{ foo.'bar-baz' }}"  # ダメ
+        msg: "{{ foo['bar-baz'] }}"
