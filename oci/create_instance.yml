@@ -12,13 +12,22 @@
     # または、$HOME/.oci/config のtenancy行に記載
 
   tasks:
+  - name: List availbility domains
+    # 利用可能可用性ゾーンの取得
+    # https://github.com/oracle/oci-ansible-collection/blob/v2.13.0/samples/compute/always_free_launch_compute_instance/setup.yaml#L16-L23
+    oci_identity_availability_domain_facts:
+      compartment_id: "{{ instance_compartment }}"
+    register: result
+  - set_fact:
+      availability_domains: "{{ result.availability_domains }}"
+
   - name: create instance
     oci_compute_instance:
       display_name: sample_instance1
+      availability_domain: "{{ availability_domains[0].name }}"
       compartment_id: "{{ instance_compartment }}"
       shape: VM.Standard.E2.1.Micro
     register: result
-  # TASK [create instance] *****************************************************************************************
-  # fatal: [localhost]: FAILED! => changed=false 
-  #   msg: AvailabilityDomain could not be inferred from the Request
-  ### AvailabilityDomainが必須だけど何を設定するか不明
+    # TASK [create instance] ***********************************************************************************************************************
+    # fatal: [localhost]: FAILED! => changed=false 
+    #   msg: 'Invalid subnet: null'
