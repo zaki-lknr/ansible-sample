@@ -44,7 +44,7 @@
     oci_network_subnet:
       display_name: subnet_sample
       cidr_block: 10.0.2.0/24
-      availability_domain: "{{ availability_domains[0].name }}"
+      # availability_domain: "{{ availability_domains[0].name }}" # セットしてるとサブネットタイプが「リージョナル」でなくなる
       compartment_id: "{{ instance_compartment }}"
       route_table_id: "{{ rt_id }}"
       vcn_id: "{{ vcn_id }}"
@@ -54,6 +54,7 @@
 
 
   - name: create instance
+    # https://github.com/oracle/oci-ansible-collection/blob/master/docs/collections/oracle/oci/oci_compute_instance_module.rst
     oci_compute_instance:
       display_name: sample_instance1
       availability_domain: "{{ availability_domains[0].name }}"
