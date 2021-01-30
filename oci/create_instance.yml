@@ -10,6 +10,12 @@
     # 環境変数 OCI_COMPARTMENT にテナンシーのコンパートメントOCIDをセットしておく
     # oci iam compartment list --query 'data[0]."compartment-id"'
     # または、$HOME/.oci/config のtenancy行に記載
+    instance_image: ocid1.image.oc1.iad.aaaaaaaaqdc7jslbtue7abhwvxaq3ihvazfvihhs2rwk2mvciv36v7ux5sda
+    #### Oracle-Linux-7.9-2021.01.12-0 @ us-ashburn-1
+    # oci compute image list -c $OCI_COMPARTMENT
+    # または下記一覧などから選択
+    # https://docs.oracle.com/en-us/iaas/images/image/b6a7b057-03a8-4624-b08b-c12caa2c63a0/
+    # Free Tierで使えるものを選ぶ必要がある。。「インスタンス作成」の画面で確認するしかない？
 
   tasks:
   - name: List availbility domains
@@ -62,7 +68,10 @@
       shape: VM.Standard.E2.1.Micro
       create_vnic_details:
         subnet_id: "{{ instance_subnet_id }}"
+      source_details:
+        image_id: "{{ instance_image }}"
+        source_type: image
     register: result
     # TASK [create instance] ***********************************************************************************************************************
     # fatal: [localhost]: FAILED! => changed=false 
-    #   msg: 'Invalid imageId: null'
+    #   msg: shape VM.Standard.E2.1.Micro not found
