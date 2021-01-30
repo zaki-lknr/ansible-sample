@@ -1,0 +1,24 @@
+---
+- name : create instances
+  collections:
+    - oracle.oci
+  connection: local
+  hosts: localhost
+
+  vars:
+    instance_compartment: "{{ lookup('env', 'OCI_COMPARTMENT') | regex_replace('\"', '') }}"
+    # 環境変数 OCI_COMPARTMENT にテナンシーのコンパートメントOCIDをセットしておく
+    # oci iam compartment list --query 'data[0]."compartment-id"'
+    # または、$HOME/.oci/config のtenancy行に記載
+
+  tasks:
+  - name: create instance
+    oci_compute_instance:
+      display_name: sample_instance1
+      compartment_id: "{{ instance_compartment }}"
+      shape: VM.Standard.E2.1.Micro
+    register: result
+  # TASK [create instance] *****************************************************************************************
+  # fatal: [localhost]: FAILED! => changed=false 
+  #   msg: AvailabilityDomain could not be inferred from the Request
+  ### AvailabilityDomainが必須だけど何を設定するか不明
