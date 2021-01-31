@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  gather_facts: false
+  
+  tasks:
+  - name: load ssh public key
+    vars:
+      pubkey: "{{ lookup('file', '/home/zaki/.ssh/id_rsa_4096.pub') }}"
+    debug:
+      msg: "{{ pubkey }}"
