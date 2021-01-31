@@ -16,6 +16,7 @@
     # または下記一覧などから選択
     # https://docs.oracle.com/en-us/iaas/images/image/b6a7b057-03a8-4624-b08b-c12caa2c63a0/
     # Free Tierで使えるものを選ぶ必要がある。。「インスタンス作成」の画面で確認するしかない？
+    instance_shape: VM.Standard.E2.1.Micro
 
   tasks:
   - name: List availbility domains
@@ -26,6 +27,45 @@
     register: result
   - set_fact:
       availability_domains: "{{ result.availability_domains }}"
+
+  # リストアップされた可用性ドメインの中から使用可能なものを探す
+  # https://github.com/oracle/oci-ansible-collection/blob/v2.13.0/samples/compute/always_free_launch_compute_instance/setup.yaml#L28-L65
+  # ちなみにwebコンソールで「コンピュート・インスタンスの作成」を行う際のパラメタでも使用可能な可用性ドメインは確認できる(AD-1/2/3のうち2が利用可)
+  - name: List shapes in first AD (0)
+    oci_compute_shape_facts:
+      compartment_id: "{{ instance_compartment }}"
+      image_id: "{{ instance_image }}"
+      availability_domain: "{{ availability_domains[0].name }}"
+    register: result
+    when: availability_domains | length > 0
+  - set_fact:
+      instance_ad: "{{ availability_domains[0].name }}"
+    loop: "{{ result.shapes }}"
+    when: item.shape == instance_shape and availability_domains | length > 0
+
+  - name: List shapes in second AD (1)
+    oci_compute_shape_facts:
+      compartment_id: "{{ instance_compartment }}"
+      image_id: "{{ instance_image }}"
+      availability_domain: "{{ availability_domains[1].name }}"
+    register: result
+    when: availability_domains | length > 1
+  - set_fact:
+      instance_ad: "{{ availability_domains[1].name }}"
+    loop: "{{ result.shapes }}"
+    when: item.shape == instance_shape and availability_domains | length > 1
+
+  - name: List shapes in third AD (2)
+    oci_compute_shape_facts:
+      compartment_id: "{{ instance_compartment }}"
+      image_id: "{{ instance_image }}"
+      availability_domain: "{{ availability_domains[2].name }}"
+    register: result
+    when: availability_domains | length > 2
+  - set_fact:
+      instance_ad: "{{ availability_domains[2].name }}"
+    loop: "{{ result.shapes }}"
+    when: item.shape == instance_shape and availability_domains | length > 2
 
 
   - name: Create VCN
@@ -50,7 +90,7 @@
     oci_network_subnet:
       display_name: subnet_sample
       cidr_block: 10.0.2.0/24
-      # availability_domain: "{{ availability_domains[0].name }}" # セットしてるとサブネットタイプが「リージョナル」でなくなる
+      # availability_domain: "{{ instance_ad }}" # セットしてるとサブネットタイプが「リージョナル」でなくなる
       compartment_id: "{{ instance_compartment }}"
       route_table_id: "{{ rt_id }}"
       vcn_id: "{{ vcn_id }}"
@@ -63,15 +103,13 @@
     # https://github.com/oracle/oci-ansible-collection/blob/master/docs/collections/oracle/oci/oci_compute_instance_module.rst
     oci_compute_instance:
       display_name: sample_instance1
-      availability_domain: "{{ availability_domains[0].name }}"
+      availability_domain: "{{ instance_ad }}"
       compartment_id: "{{ instance_compartment }}"
-      shape: VM.Standard.E2.1.Micro
+      shape: "{{ instance_shape }}"
       create_vnic_details:
         subnet_id: "{{ instance_subnet_id }}"
       source_details:
         image_id: "{{ instance_image }}"
         source_type: image
+    tags: create_vm
     register: result
-    # TASK [create instance] ***********************************************************************************************************************
-    # fatal: [localhost]: FAILED! => changed=false 
-    #   msg: shape VM.Standard.E2.1.Micro not found
