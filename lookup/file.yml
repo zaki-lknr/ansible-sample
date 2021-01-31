@@ -5,7 +5,7 @@
   tasks:
   - name: load ssh public key
     vars:
-      pubkey: "{{ lookup('file', '/home/zaki/.ssh/id_rsa_4096.pub') }}"
+      pubkey: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
     debug:
       msg: "{{ pubkey }}"
 
