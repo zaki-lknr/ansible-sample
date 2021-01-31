@@ -8,3 +8,9 @@
       pubkey: "{{ lookup('file', '/home/zaki/.ssh/id_rsa_4096.pub') }}"
     debug:
       msg: "{{ pubkey }}"
+
+  - name: load ssh public key (with env home)
+    vars:
+      pubkey: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa.pub') }}"
+    debug:
+      msg: "{{ pubkey }}"
