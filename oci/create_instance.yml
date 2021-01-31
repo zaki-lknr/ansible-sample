@@ -6,6 +6,11 @@
   hosts: localhost
 
   vars:
+    vcn_cidr_block: "10.0.0.0/16"
+    subnet:
+      name: subnet_sample
+      cidr_block: 10.0.2.0/24
+
     instance_compartment: "{{ lookup('env', 'OCI_COMPARTMENT') | regex_replace('\"', '') }}"
     # 環境変数 OCI_COMPARTMENT にテナンシーのコンパートメントOCIDをセットしておく
     # oci iam compartment list --query 'data[0]."compartment-id"'
@@ -71,7 +76,7 @@
   - name: Create VCN
     oci_network_vcn:
       compartment_id: "{{ instance_compartment }}"
-      cidr_block: "10.0.0.0/16"
+      cidr_block: "{{ vcn_cidr_block }}"
     register: result
   - set_fact:
       vcn_id: "{{ result.vcn.id }}"
@@ -88,8 +93,8 @@
   - name: Create a subnet
     # https://github.com/oracle/oci-ansible-collection/blob/master/docs/collections/oracle/oci/oci_network_subnet_module.rst
     oci_network_subnet:
-      display_name: subnet_sample
-      cidr_block: 10.0.2.0/24
+      display_name: "{{ subnet.name }}"
+      cidr_block: "{{ subnet.cidr_block }}"
       # availability_domain: "{{ instance_ad }}" # セットしてるとサブネットタイプが「リージョナル」でなくなる
       compartment_id: "{{ instance_compartment }}"
       route_table_id: "{{ rt_id }}"
