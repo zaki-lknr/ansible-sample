@@ -26,6 +26,8 @@
     # SSH公開鍵設定
     ssh_publickey_file: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa.pub"
 
+    # セキュリティリスト
+    security_list_name: sample_security_list
     # アクセス許可
     ingress_allow_cidr: "0.0.0.0/0"
 
@@ -97,11 +99,26 @@
       rt_id: "{{ result.route_table.id }}"
 
 
+  - name: get exist security_list
+    oci_network_security_list_facts:
+      display_name: "{{ security_list_name }}"
+      compartment_id: "{{ instance_compartment }}"
+    register: result
+    tags: get_security_list
+  - debug:
+      msg: "{{ result }}"
+    tags: get_security_list
+    when: result.security_lists | length > 0
+  # - set_fact:
+  #     security_list_id: 
+  #   when: result.security_lists | length > 0
+  #   tags: get_security_list
+
   - name: Create security_list
     # https://github.com/oracle/oci-ansible-collection/blob/master/docs/collections/oracle/oci/oci_network_security_list_module.rst
     oci_network_security_list:
       vcn_id: "{{ vcn_id }}"
-      display_name: sample_security_list
+      display_name: "{{ security_list_name }}"
       compartment_id: "{{ instance_compartment }}"
       ingress_security_rules:
         - protocol: "6"
@@ -126,8 +143,10 @@
         - protocol: all
           destination: "0.0.0.0/0"
     register: result
+    tags: create_security_list
   - set_fact:
       security_list_id: "{{ result.security_list.id }}"
+    tags: create_security_list
 
   - name: Create a subnet
     # https://github.com/oracle/oci-ansible-collection/blob/master/docs/collections/oracle/oci/oci_network_subnet_module.rst
