@@ -26,6 +26,9 @@
     # SSH公開鍵設定
     ssh_publickey_file: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa.pub"
 
+    # アクセス許可
+    ingress_allow_cidr: "0.0.0.0/0"
+
   tasks:
   - name: List availbility domains
     # 利用可能可用性ゾーンの取得
@@ -92,6 +95,39 @@
     register: result
   - set_fact:
       rt_id: "{{ result.route_table.id }}"
+
+
+  - name: Create security_list
+    # https://github.com/oracle/oci-ansible-collection/blob/master/docs/collections/oracle/oci/oci_network_security_list_module.rst
+    oci_network_security_list:
+      vcn_id: "{{ vcn_id }}"
+      display_name: sample_security_list
+      compartment_id: "{{ instance_compartment }}"
+      ingress_security_rules:
+        - protocol: "6"
+          source: "0.0.0.0/0"
+          tcp_options:
+            destination_port_range:
+              max: 22
+              min: 22
+        - protocol: "6"
+          source: "{{ ingress_allow_cidr }}"
+          tcp_options:
+            destination_port_range:
+              max: 80
+              min: 80
+        - protocol: "6"
+          source: "{{ ingress_allow_cidr }}"
+          tcp_options:
+            destination_port_range:
+              max: 8080
+              min: 8080
+      egress_security_rules:
+        - protocol: all
+          destination: "0.0.0.0/0"
+    register: result
+  - set_fact:
+      security_list_id: "{{ result.security_list.id }}"
 
   - name: Create a subnet
     # https://github.com/oracle/oci-ansible-collection/blob/master/docs/collections/oracle/oci/oci_network_subnet_module.rst
