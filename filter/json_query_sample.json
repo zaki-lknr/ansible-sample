@@ -1,0 +1,64 @@
+{
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+        "labels": {
+            "app": "sample-http"
+        },
+        "name": "sample-http",
+        "namespace": "default"
+    },
+    "spec": {
+        "replicas": 2,
+        "selector": {
+            "matchLabels": {
+                "app": "sample-http"
+            }
+        },
+        "template": {
+            "metadata": {
+                "labels": {
+                    "app": "sample-http"
+                }
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "image": "httpd",
+                        "name": "httpd",
+                        "ports": [
+                            {
+                                "containerPort": 80,
+                                "hostPort": 80
+                            }
+                        ],
+                        "env": [
+                            {
+                                "name": "SRC_PORT",
+                                "value": "443"
+                            },
+                            {
+                                "name": "DEST_PROTO",
+                                "value": "TCP"
+                            }
+                        ]
+                    },
+                    {
+                        "image": "centos",
+                        "name": "side",
+                        "env": [
+                            {
+                                "name": "SRC_PORT",
+                                "value": "80"
+                            },
+                            {
+                                "name": "DEST_PROTO",
+                                "value": "TCP"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

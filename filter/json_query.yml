@@ -1,0 +1,36 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  vars:
+    json_data: "{{ lookup('file', 'json_query_sample.json') }}"
+    json_data2: "{{ lookup('file', 'json_query_sample2.json') }}"
+
+  tasks:
+    - debug:
+        msg: "{{ json_data }}"
+
+    - name: query
+      debug:
+        msg:
+        - "{{ json_data | json_query('apiVersion') }}"
+        - "{{ json_data | json_query('metadata.labels') }}"
+        - "{{ json_data | json_query('spec.template.spec.containers[0].ports[0].hostPort') }}" # 80
+        - "{{ json_data | json_query('spec.template.spec.containers[0].image') }}"             # httpd
+        - "{{ json_data | json_query('spec.template.spec.containers[0].env[0].value') }}"      # 443
+        - "{{ json_data | json_query('spec.template.spec.containers[1].env[0].value') }}"      # 80
+        - "{{ json_data | json_query(\"spec.template.spec.containers[?image == 'httpd']\") }}"
+        - "{{ json_data | json_query(\"spec.template.spec.containers[?env[0].value == '80'].image\") }}"
+        - "{{ json_data | json_query('spec.template.spec.containers[?env[0].value == `80`].image') }}" # []
+        # - "{{ json_data | json_query('spec.template.spec.containers[?env[0].value == ''80''].image') }}" # invalid token: Parse error at column 47, token "80" (NUMBER)
+        - "{{ json_data | json_query('spec.template.spec.containers[?env[1].value == `TCP`].image') }}"
+        - "{{ json_data | json_query('spec.template.spec.containers[?env[1].value==''TCP''].image') }}" # []
+        # - "{{ json_data | json_query('spec.template.spec.containers[?env[1].value == ].image') }}"
+        #- "{{ json_data2 | json_query(\"machines[?state=='running'].name\") }}"
+
+    - name: query by variable value
+      vars:
+        query: spec.template.spec.containers[?env[0].value == '443'].image
+      debug:
+        msg:
+          - "{{ json_data | json_query(query) }}"

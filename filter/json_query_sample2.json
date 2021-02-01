@@ -1,0 +1,7 @@
+{
+  "machines": [
+    {"name": "a", "state": "running"},
+    {"name": "b", "state": "stopped"},
+    {"name": "b", "state": "running"}
+  ]
+}
