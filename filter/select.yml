@@ -1,0 +1,18 @@
+- hosts: localhost
+  gather_facts: no
+
+  vars:
+    hosts:
+      - web1
+      - web2
+      - web3
+      - db1
+      - db2
+      - web1
+      - dns
+
+  tasks:
+  - name: split filter sample
+    debug:
+      msg:
+      - '{{ hosts | select("eq", "web1") }}'  # web1が取れる
