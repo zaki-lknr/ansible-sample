@@ -1,0 +1,53 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  # バージョン文字列を比較する
+  # https://docs.ansible.com/ansible/latest/user_guide/playbooks_tests.html#comparing-versions
+
+  # 参考
+  #
+  # pythonでバージョン番号の比較を行う | 俺的備忘録 〜なんかいろいろ〜
+  # https://orebibou.com/ja/home/201703/20170330_001/
+  #
+  # Ansible でバージョンチェックする - ひつまぶし食べたい
+  # https://www.hitsumabushi.org/blog/2017/11/10/1402.html
+
+  vars:
+    test_data:
+    - v1: 1.2.3
+      v2: 1.2.3
+    - v1: 1.2.3
+      v2: 1.2.4
+    - v1: 1.2.3
+      v2: 1.2.30
+    - v1: 1.2.3
+      v2: 1.2.3.1
+    - v1: 1.2.3
+      v2: 1.2.3.a
+    - v1: 1.2.3.1
+      v2: 1.2.4
+    - v1: 1.2.03.1
+      v2: 1.2.4
+    # - v1: 1.2.3
+    #   v2: 1.2.a
+    # fatal: [localhost]: FAILED! => {"msg": "Version comparison: '<' not supported between instances of 'int' and 'str'"}
+    # dotでバラして各フィールドを比較しようとしてるけど数値と文字という差があるとダメっぽい。(文字同士ならOK↓)
+    - v1: 1.2.a
+      v2: 1.2.b
+    - v1: '0x01'
+      v2: '0x0a' # NG
+    - v1: '0x1'
+      v2: '0xa' # OK
+    # - v1: '0x1'
+    #   v2: '0xA'
+    # fatal: [localhost]: FAILED! => {"msg": "Version comparison: '<' not supported between instances of 'int' and 'str'"}
+    # ↑↑ この辺り挙動が謎
+
+  # v1よりv2の方が「同じか新しいこと(>=)」をテストする
+
+  tasks:
+  - name: compare versoin
+    debug:
+      msg: "{{ item.v1 is version(item.v2, '<=') }}"
+    with_items: "{{ test_data }}"
