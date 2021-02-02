@@ -30,3 +30,14 @@
     debug:
       msg: "{{ item | int(base=8) }}"
     with_items: "{{ oct_values }}"
+
+  - name: bin to dec
+    vars:
+      bin_values:
+      - '0b11'
+      - '101'   # 0b101 -> 5
+      - 'z'    # 0
+      - '0x0a' # 0
+    debug:
+      msg: "{{ item | int(base=2) }}"
+    with_items: "{{ bin_values }}"
