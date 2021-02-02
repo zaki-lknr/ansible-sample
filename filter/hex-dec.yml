@@ -1,0 +1,20 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: hex to dec
+    vars:
+      hex_values:
+      - '0xa'
+      - '0x0a'
+      - '0xff'
+      - '0xffff'
+      - '0xdeadbeaf'
+      - '0b0'  # 0x0b0 
+      - 'b'    # 0x0b
+      - 'ff'   # 0xff
+      - 'z'    # 0
+    debug:
+      msg: "{{ item | int(base=16) }}"
+    with_items: "{{ hex_values }}"
