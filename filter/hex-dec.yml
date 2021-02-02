@@ -15,6 +15,18 @@
       - 'b'    # 0x0b
       - 'ff'   # 0xff
       - 'z'    # 0
+      - '0o11' # 0
     debug:
       msg: "{{ item | int(base=16) }}"
     with_items: "{{ hex_values }}"
+
+  - name: oct to dec
+    vars:
+      oct_values:
+      - '0o11'
+      - '77'   # 0o77 -> 63
+      - 'z'    # 0
+      - '0x0a' # 0
+    debug:
+      msg: "{{ item | int(base=8) }}"
+    with_items: "{{ oct_values }}"
