@@ -16,3 +16,9 @@
     debug:
       msg:
       - '{{ hosts | select("eq", "web1") }}'  # web1が取れる
+      - '{{ hosts | select("match", "web") }}' # webにmatchするもの
+      - '{{ hosts | select("match", "b") }}'   # bが含まれるもの…と思いきやre.match("b")っぽい。bで始まるもののみ
+      - '{{ hosts | select("search", "b") }}'  # bがどこかに含まれるもの re.search("b")っぽい
+      - '{{ hosts | select("regex", "b") }}'   # デフォルトでは"search"と同じように動作。
+      # https://docs.ansible.com/ansible/latest/user_guide/playbooks_tests.html#testing-strings
+      # regexは `match_type` を渡せば (Pythonのreをコントロールして) 動作を変えることができるらしい。(が、おそらくselectとの併用では不可？)
