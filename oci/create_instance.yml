@@ -9,6 +9,7 @@
     vcn:
       name: vcn_sample
       cidr_block: "10.1.0.0/16"
+    internet_gateway_name: gateway_sample
     route:
       name: route_sample
       cidr_block: "0.0.0.0/0"
@@ -96,14 +97,25 @@
   - set_fact:
       vcn_id: "{{ result.vcn.id }}"
 
+  - name: Create internet_gateway
+    oci_network_internet_gateway:
+      display_name: "{{ internet_gateway_name }}"
+      compartment_id: "{{ instance_compartment }}"
+      vcn_id: "{{ vcn_id }}"
+      is_enabled: true
+    register: result
+  - set_fact:
+      ig_id: "{{ result.internet_gateway.id }}"
+
   - name: Create Route Table
     # https://github.com/oracle/oci-ansible-collection/blob/master/docs/collections/oracle/oci/oci_network_route_table_module.rst
     oci_network_route_table:
       compartment_id: "{{ instance_compartment }}"
       display_name: "{{ route.name }}"  # name未指定だとvcnの名前をベースに自動生成("Default Route Table for {{vcn_name}}")される
+      vcn_id: "{{ vcn_id }}"
       route_rules:
       - cidr_block: "{{ route.cidr_block }}"
-        # network_entity_id: "{{ ig_id }}"
+        network_entity_id: "{{ ig_id }}"
     register: result
   - set_fact:
       rt_id: "{{ result.route_table.id }}"
