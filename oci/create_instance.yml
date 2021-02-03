@@ -152,6 +152,8 @@
       # availability_domain: "{{ instance_ad }}" # セットしてるとサブネットタイプが「リージョナル」でなくなる
       compartment_id: "{{ instance_compartment }}"
       route_table_id: "{{ rt_id }}"
+      security_list_ids:
+      - "{{ security_list_id }}"
       vcn_id: "{{ vcn_id }}"
     register: result
   - set_fact:
