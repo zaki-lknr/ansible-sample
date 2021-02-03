@@ -6,10 +6,12 @@
   hosts: localhost
 
   vars:
-    vcn_cidr_block: "10.0.0.0/16"
+    vcn:
+      name: vcn_sample
+      cidr_block: "10.1.0.0/16"
     subnet:
       name: subnet_sample
-      cidr_block: 10.0.2.0/24
+      cidr_block: 10.1.2.0/24
 
     instance_compartment: "{{ lookup('env', 'OCI_COMPARTMENT') | regex_replace('\"', '') }}"
     # 環境変数 OCI_COMPARTMENT にテナンシーのコンパートメントOCIDをセットしておく
@@ -82,9 +84,11 @@
 
 
   - name: Create VCN
+    # https://github.com/oracle/oci-ansible-collection/blob/master/docs/collections/oracle/oci/oci_network_vcn_module.rst
     oci_network_vcn:
       compartment_id: "{{ instance_compartment }}"
-      cidr_block: "{{ vcn_cidr_block }}"
+      display_name: "{{ vcn.name }}"  # 未指定だとデフォルトのVCNが使用される
+      cidr_block: "{{ vcn.cidr_block }}"
     register: result
   - set_fact:
       vcn_id: "{{ result.vcn.id }}"
@@ -93,7 +97,7 @@
     # https://github.com/oracle/oci-ansible-collection/blob/master/docs/collections/oracle/oci/oci_network_route_table_module.rst
     oci_network_route_table:
       compartment_id: "{{ instance_compartment }}"
-      # name: route_sample  # name未指定だとデフォルトのルートテーブルになるっぽい？
+      # name: route_sample  # name未指定だとvcnの名前をベースに自動生成("Default Route Table for {{vcn_name}}")される
     register: result
   - set_fact:
       rt_id: "{{ result.route_table.id }}"
