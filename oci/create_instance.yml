@@ -91,11 +91,12 @@
     # https://github.com/oracle/oci-ansible-collection/blob/master/docs/collections/oracle/oci/oci_network_vcn_module.rst
     oci_network_vcn:
       compartment_id: "{{ instance_compartment }}"
-      display_name: "{{ vcn.name }}"  # 未指定だとデフォルトのVCNが使用される
+      display_name: "{{ vcn.name }}"  # 未指定だとデフォルトのVCNが使用される？
       cidr_block: "{{ vcn.cidr_block }}"
     register: result
   - set_fact:
       vcn_id: "{{ result.vcn.id }}"
+      rt_id: "{{ result.vcn.default_route_table_id }}"
 
   - name: Create internet_gateway
     oci_network_internet_gateway:
@@ -107,11 +108,12 @@
   - set_fact:
       ig_id: "{{ result.internet_gateway.id }}"
 
-  - name: Create Route Table
+  - name: Update Route Table
     # https://github.com/oracle/oci-ansible-collection/blob/master/docs/collections/oracle/oci/oci_network_route_table_module.rst
     oci_network_route_table:
       compartment_id: "{{ instance_compartment }}"
-      display_name: "{{ route.name }}"  # name未指定だとvcnの名前をベースに自動生成("Default Route Table for {{vcn_name}}")される
+      display_name: "{{ route.name }}"
+      rt_id: "{{ rt_id }}"
       vcn_id: "{{ vcn_id }}"
       route_rules:
       - cidr_block: "{{ route.cidr_block }}"
