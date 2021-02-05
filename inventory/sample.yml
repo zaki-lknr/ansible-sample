@@ -9,3 +9,6 @@
           - "{{ config }}"
           - "{{ list_value }}"
           - "{{ list_value[0] }}"
+          - "{{ dict_value }}"
+          - "{{ dict_value.shell }}"
+          - "{{ dict_value['path'] }}"
