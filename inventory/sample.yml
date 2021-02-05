@@ -1,0 +1,11 @@
+---
+- hosts: hosts
+  gather_facts: false
+
+  tasks:
+    - name: sample
+      debug:
+        msg:
+          - "{{ config }}"
+          - "{{ list_value }}"
+          - "{{ list_value[0] }}"
