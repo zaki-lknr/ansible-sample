@@ -1,4 +1,5 @@
 <group name="interfaces">
 {{ number }}: {{ interface }}: {{ ignore(".*") }}
     inet {{ addr }} brd {{ broadcast }} {{ ignore(".*") }}
+    inet {{ addr }} {{ ignore(".*") }}
 </group>
