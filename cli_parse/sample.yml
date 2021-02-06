@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+  vars:
+    ipaddr: "{{ lookup('pipe', 'ip a') }}"
+
+  # fatal: [localhost]: FAILED! => 
+  #   msg: You need to install "jc" prior to running jc filter
+  # require:
+  #    pip install jc
+
+  tasks:
+    - name: jc parser
+      debug:
+        msg: "{{ ipaddr | community.general.jc('ifconfig') }}"
+        # ifconfigは使えん
+
+  # fatal: [localhost]: FAILED! => changed=false 
+  #   msg: Failed to import the required Python library (ttp) on cloud-dev's Python /home/zaki/src/ansible-sample/venv/a2.10/bin/python3.
+  # require:
+  #   pip install ttp
+
+    - name: cli parse
+      ansible.netcommon.cli_parse:
+        text: "{{ ipaddr }}"
+        parser:
+          name: ansible.netcommon.ttp
+          template_path: "./ttp-template/ip-a.ttp"
