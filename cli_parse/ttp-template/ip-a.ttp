@@ -1,11 +1,7 @@
-<group name="interfaces-qlen">
+<group name="interfaces">
 {{ number }}: {{ interface }}: &lt;{{ mode }}&gt; mtu {{ mtu }} qdisc {{ qdisc }} state {{ state }} group {{ group }} qlen {{ qlen }}
+{{ number | _start_ }}: {{ interface }}: &lt;{{ mode }}&gt; mtu {{ mtu }} qdisc {{ qdisc }} state {{ state }} group {{ group }}
     inet {{ addr }} brd {{ broadcast }} {{ ignore(".*") }}
     inet {{ addr }} {{ ignore(".*") }}
 </group>
 
-<group name="interfaces-nolen">
-{{ number }}: {{ interface }}: &lt;{{ mode }}&gt; mtu {{ mtu }} qdisc {{ qdisc }} state {{ state }} group {{ group }}
-    inet {{ addr }} brd {{ broadcast }} {{ ignore(".*") }}
-    inet {{ addr }} {{ ignore(".*") }}
-</group>
