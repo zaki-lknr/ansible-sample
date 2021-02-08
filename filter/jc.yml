@@ -35,3 +35,9 @@
         iptables: "{{ lookup('pipe', 'sudo iptables -nL') }}"
       debug:
         msg: "{{ iptables | community.general.jc('iptables') }}"
+
+    - name: jc parser ini
+      vars:
+        ini: "{{ lookup('file', 'jc-sample.ini') }}"
+      debug:
+        msg: "{{ ini | community.general.jc('ini') }}"
