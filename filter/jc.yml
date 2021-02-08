@@ -15,3 +15,10 @@
         msg: "{{ result | community.general.jc('ps') }}"
     # filter種別はこちら
     # https://github.com/kellyjonbrazil/jc#parsers
+
+    - name: jc parser free
+      vars:
+        # free: "{{ lookup('pipe', 'free -h') }}"
+        free: "{{ lookup('pipe', 'free') }}"
+      debug:
+        msg: "{{ free | community.general.jc('free') }}"
