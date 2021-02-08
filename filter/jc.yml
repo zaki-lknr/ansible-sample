@@ -22,3 +22,16 @@
         free: "{{ lookup('pipe', 'free') }}"
       debug:
         msg: "{{ free | community.general.jc('free') }}"
+
+    - name: jc parser ss
+      vars:
+        iptables: "{{ lookup('pipe', 'sudo ss -anpl') }}"
+      debug:
+        msg: "{{ iptables | community.general.jc('ss') }}"
+
+    - name: jc parser iptables
+      vars:
+        # iptables: "{{ lookup('pipe', 'sudo iptables -t nat -nL') }}"
+        iptables: "{{ lookup('pipe', 'sudo iptables -nL') }}"
+      debug:
+        msg: "{{ iptables | community.general.jc('iptables') }}"
