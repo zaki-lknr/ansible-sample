@@ -200,3 +200,52 @@
         ssh_authorized_keys: "{{ lookup('file', ssh_publickey_file) }}"
     tags: create_vm
     register: result
+  - set_fact:
+      instance_id: "{{ result.instance.id }}"
+    tags: create_vm
+
+  - name: Create volume
+    # https://github.com/oracle/oci-ansible-collection/blob/master/docs/collections/oracle/oci/oci_blockstorage_volume_module.rst
+    oci_blockstorage_volume:
+      availability_domain: "{{ instance_ad }}"
+      compartment_id: "{{ instance_compartment }}"
+      name: sample_volume
+      size_in_gbs: 50
+      # volumeの最低サイズは50
+      # 小さいとエラーとなる。
+      # msg: The requested volumeSize 10 GB is not supported. It should be between 50 GB and 32768 GB.
+      # また、Always Freeでは合計100Gまで。超えるとエラー。
+      # msg: You cannot create a volume because you have reached your limit. Upgrade to a paid account.
+    tags: create_volume
+    register: result
+  - set_fact:
+      volume_id: "{{result.volume.id }}"
+    tags: create_volume
+
+  - name: Attach volume to new instance
+    # https://github.com/oracle/oci-ansible-collection/blob/master/docs/collections/oracle/oci/oci_compute_volume_attachment_module.rst
+    oci_compute_volume_attachment:
+      instance_id: "{{ instance_id }}"
+      type: paravirtualized
+      volume_id: "{{ volume_id }}"
+      compartment_id: "{{ instance_compartment }}"
+      # volumeをattachすると以下のようにdiskが認識される。
+      # [   46.342921] scsi 2:0:1:1: Direct-Access     ORACLE   BlockVolume      1.0  PQ: 0 ANSI: 6
+      # [   46.351783] sd 2:0:1:1: Power-on or device reset occurred
+      # [   46.353257] sd 2:0:1:1: Attached scsi generic sg1 type 0
+      # [   46.443226] sd 2:0:1:1: [sdb] 104857600 512-byte logical blocks: (53.7 GB/50.0 GiB)
+      # [   46.448386] sd 2:0:1:1: [sdb] 4096-byte physical blocks
+      # [   46.452271] sd 2:0:1:1: [sdb] Write Protect is off
+      # [   46.455677] sd 2:0:1:1: [sdb] Mode Sense: 2b 00 10 08
+      # [   46.538300] sd 2:0:1:1: [sdb] Write cache: disabled, read cache: enabled, supports DPO and FUA
+      # [   46.544653] sd 2:0:1:1: [sdb] Optimal transfer size 1048576 bytes
+      # [   46.648628] sd 2:0:1:1: [sdb] Attached SCSI disk
+      #
+      # ただしブロックストレージがアタッチされるのみなので、フォーマットなどOSから認識されるにはフォーマットなどが必要。たぶん
+      # $ sudo fdisk -l /dev/sdb
+      # Disk /dev/sdb: 53.7 GB, 53687091200 bytes, 104857600 sectors
+      # Units = sectors of 1 * 512 = 512 bytes
+      # Sector size (logical/physical): 512 bytes / 4096 bytes
+      # I/O サイズ (最小 / 推奨): 4096 バイト / 1048576 バイト
+      #
+    tags: create_volume
