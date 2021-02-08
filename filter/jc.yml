@@ -41,3 +41,10 @@
         ini: "{{ lookup('file', 'jc-sample.ini') }}"
       debug:
         msg: "{{ ini | community.general.jc('ini') }}"
+
+    - name: jc parser kv
+      vars:
+        ini: "{{ lookup('file', 'jc-sample.kv') }}"
+      debug:
+        msg: "{{ ini | community.general.jc('kv') }}"
+        # kvはiniと中身は同じ(iniの処理をコールしてる)
