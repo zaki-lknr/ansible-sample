@@ -9,11 +9,13 @@
         str_year: "2021"
         str_ymdhms: 2021.02.10 09-15-20
         str_jst: Wed Feb 10 09:17:08 JST 2021
+        str_offset: Wed Feb 10 09:17:08 +0900 2021
       debug:
         msg:
           - "{{ str_sample | to_datetime }}"
           - "{{ str_year | to_datetime('%Y') }}"
           - "{{ str_ymdhms | to_datetime('%Y.%m.%d %H-%M-%S') }}"
           - "{{ str_jst | to_datetime('%a %b %d %H:%M:%S %Z %Y') }}"
+          - "{{ str_offset | to_datetime('%a %b %d %H:%M:%S %z %Y') }}"
           - "{{ (str_jst | to_datetime('%a %b %d %H:%M:%S %Z %Y')).timestamp() }}"  # 型はfloat ('1612916228.0')
           - "{{ lookup('pipe', 'date +%s') }}"
