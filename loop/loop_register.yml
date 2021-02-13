@@ -67,3 +67,48 @@
     #         ]
     #     }
     # }
+
+    - name: command @ loop with register
+      command: "{{ item }}"
+      with_items:
+        - uname
+        - pwd
+      register: result_command_loop
+
+    - name: print result
+      debug:
+        msg: "{{ result_command_loop }}"
+
+    # TASK [print result] ***************************************
+    # ok: [localhost] => {
+    #     "msg": {
+    #         "changed": true,
+    #         "msg": "All items completed",
+    #         "results": [
+    #             {
+    #                 "ansible_loop_var": "item",
+    #                 "changed": true,
+    #                 "cmd": [
+    #                     "uname"
+    #                 ],
+    #                  ...
+    #                 "stdout": "Linux",
+    #                 "stdout_lines": [
+    #                     "Linux"
+    #                 ]
+    #             },
+    #             {
+    #                 "ansible_loop_var": "item",
+    #                 "changed": true,
+    #                 "cmd": [
+    #                     "pwd"
+    #                 ],
+    #                  ...
+    #                 "stdout": "/home/zaki/src/ansible-sample/loop",
+    #                 "stdout_lines": [
+    #                     "/home/zaki/src/ansible-sample/loop"
+    #                 ]
+    #             }
+    #         ]
+    #     }
+    # }
