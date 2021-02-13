@@ -1,0 +1,69 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  # with_itemsとregisterの併用
+  tasks:
+    - name: register
+      debug:
+        msg: curry
+      register: result_debug
+
+    - name: print result
+      debug:
+        msg: "{{ result_debug }}"
+
+    #### result
+    # TASK [print result] ****************************************************
+    # ok: [localhost] => {
+    #     "msg": {
+    #         "changed": false,
+    #         "failed": false,
+    #         "msg": "curry"
+    #     }
+    # }
+
+    - name: loop with register
+      debug:
+        msg: "{{ item }}"
+      with_items:
+        - curry
+        - pasta
+        - niku
+      register: result_list_debug
+
+    - name: print result
+      debug:
+        msg: "{{ result_list_debug }}"
+
+    ##### result
+    # TASK [print result] ***********************************************
+    # ok: [localhost] => {
+    #     "msg": {
+    #         "changed": false,
+    #         "msg": "All items completed",
+    #         "results": [
+    #             {
+    #                 "ansible_loop_var": "item",
+    #                 "changed": false,
+    #                 "failed": false,
+    #                 "item": "curry",
+    #                 "msg": "curry"
+    #             },
+    #             {
+    #                 "ansible_loop_var": "item",
+    #                 "changed": false,
+    #                 "failed": false,
+    #                 "item": "pasta",
+    #                 "msg": "pasta"
+    #             },
+    #             {
+    #                 "ansible_loop_var": "item",
+    #                 "changed": false,
+    #                 "failed": false,
+    #                 "item": "niku",
+    #                 "msg": "niku"
+    #             }
+    #         ]
+    #     }
+    # }
