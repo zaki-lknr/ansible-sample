@@ -1,0 +1,34 @@
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+  - name: deploy
+    community.kubernetes.k8s:
+      name: testing
+      # host: kubectl cluster-info で確認
+      host: '{{ api_endpoint }}'
+      # ca_cert.crt: kubectl get secret -n rbac-sample sample-account-token-k6wk7 -o jsonpath='{.data.ca\.crt}' | base64 -d > data/ca_crt.crt
+      ca_cert: '{{ ca_cert_filepath }}'
+      # api_key: kubectl get secret -n rbac-sample sample-account-token-k6wk7 -o jsonpath='{.data.token}' | base64 -d で取得
+      api_key: '{{ api_key }}'
+      state: present
+      definition:
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          labels:
+            app: sample-http
+          name: sample-http
+          namespace: rbac-sample
+        spec:
+          selector:
+            matchLabels:
+              app: sample-http
+          template:
+            metadata:
+              labels:
+                app: sample-http
+            spec:
+              containers:
+              - image: httpd
+                name: httpd
