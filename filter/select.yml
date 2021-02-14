@@ -10,6 +10,12 @@
       - db2
       - web1
       - dns
+    integer:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
 
   tasks:
   - name: split filter sample
@@ -22,3 +28,13 @@
       - '{{ hosts | select("regex", "b") }}'   # デフォルトでは"search"と同じように動作。
       # https://docs.ansible.com/ansible/latest/user_guide/playbooks_tests.html#testing-strings
       # regexは `match_type` を渡せば (Pythonのreをコントロールして) 動作を変えることができるらしい。(が、おそらくselectとの併用では不可？)
+
+  - name: select integer values
+    debug:
+      msg:
+      - '{{ integer | select("eq", 2) }}'  # 2と同値か
+      - '{{ integer | select("==", 2) }}'  # "eq"と同じ
+      - '{{ integer | select("le", 3) }}'  # 3以下か
+      - '{{ integer | select("<=", 3) }}'  # "le"と同じ
+      - '{{ integer | select("lt", 3) }}'  # 3未満か
+      - '{{ integer | select("<", 3) }}'   # "lt"と同じ
