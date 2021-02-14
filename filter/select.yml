@@ -34,6 +34,11 @@
         - subitem2
       - key: 1
         value: 2
+    contain_list:
+      - curry
+      - "123"
+      - 1
+      - 0
 
   tasks:
   - name: split filter sample
@@ -69,3 +74,10 @@
       - '{{ type_mix | select("float") }}'    # 3.14
       - '{{ type_mix | select("sequence") }}' # リストだけではなく、文字列・リスト・辞書が取れる
       - '{{ type_mix | select("mapping") }}'  # {key, value}
+
+  - name: contain list
+    debug:
+      msg:
+      - '{{ type_mix | select("in", contain_list) }}'
+        # contain_listに含まれるものでフィルタ
+        # ただし、数値の1と0はtrue/falseにもヒットする
