@@ -16,6 +16,24 @@
       - 2
       - 3
       - 4
+    type_mix:
+      - 1
+      - 12
+      - a
+      - ab
+      - curry
+      - 755
+      - true
+      - false
+      - 3.14
+      - "true"
+      - "false"
+      - "123"
+      - "3.14"
+      - - subitem1
+        - subitem2
+      - key: 1
+        value: 2
 
   tasks:
   - name: split filter sample
@@ -38,3 +56,16 @@
       - '{{ integer | select("<=", 3) }}'  # "le"と同じ
       - '{{ integer | select("lt", 3) }}'  # 3未満か
       - '{{ integer | select("<", 3) }}'   # "lt"と同じ
+
+  - name: select values type
+    debug:
+      msg:
+      - '{{ type_mix | select("string") }}'   # curry, 'trye', ...
+      - '{{ type_mix | select("integer") }}'  # 755
+      - '{{ type_mix | select("number") }}'   # 755, true, false, 3.14
+      - '{{ type_mix | select("boolean") }}'  # true, false
+      - '{{ type_mix | select("true") }}'     # true
+      - '{{ type_mix | select("false") }}'    # false
+      - '{{ type_mix | select("float") }}'    # 3.14
+      - '{{ type_mix | select("sequence") }}' # リストだけではなく、文字列・リスト・辞書が取れる
+      - '{{ type_mix | select("mapping") }}'  # {key, value}
