@@ -99,3 +99,19 @@
       msg:
       - '{{ version_string | select("version", "1.1.0", "gt") }}'
       - '{{ version_string[1] is version("0.9.9", "gt") }}'
+
+  - name: file path test
+    vars:
+      path_list:
+        - /
+        - /bin
+        - /usr/bin/perl
+        - /usr/bin/python3
+        - /not-found-path
+    debug:
+      msg:
+      - '{{ path_list | select("directory") }}'  # /, /bin
+      - '{{ path_list | select("file") }}'       # perl, python3
+      - '{{ path_list | select("link") }}'       # /bin, python3
+      - '{{ path_list | select("exists") }}'     # /not-found-path 以外
+      - '{{ path_list | select("mount") }}'      # /
