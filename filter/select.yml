@@ -81,3 +81,18 @@
       - '{{ type_mix | select("in", contain_list) }}'
         # contain_listに含まれるものでフィルタ
         # ただし、数値の1と0はtrue/falseにもヒットする
+
+  - name: version sample
+    vars:
+      version_string:
+        - 1.0.0
+        - 1.1.0
+        - 1.01.0
+        - 1.9.0
+        - 1.10.0
+        # - 1.a.0  # 'a'が文字のため比較できない
+        - '1.0.1'
+    debug:
+      msg:
+      - '{{ version_string | select("version", "1.1.0", "gt") }}'
+      - '{{ version_string[1] is version("0.9.9", "gt") }}'
