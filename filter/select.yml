@@ -81,6 +81,9 @@
       - '{{ type_mix | select("in", contain_list) }}'
         # contain_listに含まれるものでフィルタ
         # ただし、数値の1と0はtrue/falseにもヒットする
+      - '{{ hosts | select("contains", "e") }}'
+        # web1,web2,web3,web1が取れる。
+        # hostsの各要素を文字単位にバラシて、各文字内に"e"を含むかどうか
 
   - name: version sample
     vars:
