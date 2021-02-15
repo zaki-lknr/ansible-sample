@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: pull image
+      community.docker.docker_image:
+        name: centos
+        tag: '8'
+        source: pull
