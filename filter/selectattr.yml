@@ -6,14 +6,26 @@
       - name: web1
         addr: 192.168.2.10
         mask: 255.255.255.0
+        pkg:
+          - httpd
+          - php
+          - python
       - name: web2
         addr: 192.168.2.11
         mask: 255.255.255.0
+        pkg:
+          - httpd
+          - ruby
+          - python
       - addr: 192.168.2.0
         mask: 255.255.255.0
       - name: db1
         addr: 192.168.2.20
         mask: 255.255.255.0
+        pkg:
+          - mysql
+          - postgres
+          - php
 
   tasks:
   - name: split filter sample
@@ -21,3 +33,4 @@
       msg:
       - '{{ hosts | selectattr("name", "defined") | selectattr("name", "eq", "web1") }}'
       - '{{ hosts | selectattr("name", "defined") | selectattr("name", "match", ".*1") }}'
+      - '{{ hosts | selectattr("name", "defined") | selectattr("pkg", "contains", "php") }}'
