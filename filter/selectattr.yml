@@ -19,6 +19,8 @@
           - python
       - addr: 192.168.2.0
         mask: 255.255.255.0
+        pkg:
+          - php
       - name: db1
         addr: 192.168.2.20
         mask: 255.255.255.0
@@ -33,4 +35,4 @@
       msg:
       - '{{ hosts | selectattr("name", "defined") | selectattr("name", "eq", "web1") }}'
       - '{{ hosts | selectattr("name", "defined") | selectattr("name", "match", ".*1") }}'
-      - '{{ hosts | selectattr("name", "defined") | selectattr("pkg", "contains", "php") }}'
+      - '{{ hosts | selectattr("pkg", "contains", "php") }}'
