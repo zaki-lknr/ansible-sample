@@ -50,7 +50,8 @@
       - '{{ hosts | select("search", "b") }}'  # bがどこかに含まれるもの re.search("b")っぽい
       - '{{ hosts | select("regex", "b") }}'   # デフォルトでは"search"と同じように動作。
       # https://docs.ansible.com/ansible/latest/user_guide/playbooks_tests.html#testing-strings
-      # regexは `match_type` を渡せば (Pythonのreをコントロールして) 動作を変えることができるらしい。(が、おそらくselectとの併用では不可？)
+      # regexは `match_type` を渡せば (Pythonのreをコントロールして) 動作を変えることができる。
+      - '{{ hosts | select("regex", "d.*\d+", match_type="fullmatch") }}'   # match_typeでメソッド指定
 
   - name: select integer values
     debug:
