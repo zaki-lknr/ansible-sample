@@ -1,0 +1,30 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: task1
+    debug:
+      msg: task1
+
+  - block:
+
+    - name: task1 in block
+      debug:
+        msg: hello
+
+    - name: task2 in block
+      debug:
+        msg: good-by
+
+    # with_items:
+    #   - 1
+    #   - 2
+    # ### ERROR! 'with_items' is not a valid attribute for a Block
+    # blockのレベルでwith_itemsは使用できない
+
+    # loop:
+    #   - 1
+    #   - 2
+    # ### ERROR! 'loop' is not a valid attribute for a Block
+    # # loopも同様
