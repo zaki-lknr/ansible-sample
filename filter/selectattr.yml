@@ -33,6 +33,7 @@
   - name: split filter sample
     debug:
       msg:
+      - '{{ hosts | selectattr("name", "defined") }}'
       - '{{ hosts | selectattr("name", "defined") | selectattr("name", "eq", "web1") }}'
       - '{{ hosts | selectattr("name", "defined") | selectattr("name", "match", ".*1") }}'
       - '{{ hosts | selectattr("pkg", "contains", "php") }}'
