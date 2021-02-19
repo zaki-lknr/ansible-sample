@@ -3,6 +3,11 @@
   gather_facts: false
 
   # with_itemsとregisterの併用
+  #
+  # Registering variables with a loop
+  # https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html#registering-variables-with-a-loop
+  #
+  # When you use register with a loop, the data structure placed in the variable will contain a results attribute that is a list of all responses from the module.
   tasks:
     - name: register
       debug:
