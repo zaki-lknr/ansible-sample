@@ -1,0 +1,9 @@
+---
+- hosts: pods
+  gather_facts: false
+
+  tasks:
+    - name: sample
+      # vars:
+      #   ansible_kubectl_namespace: rbac-sample
+      command: ls
