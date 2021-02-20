@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: log sample
+    community.kubernetes.k8s_log:
+      host: '{{ api_endpoint }}'
+      ca_cert: '{{ ca_cert_filepath }}'
+      api_key: '{{ api_key }}'
+      namespace: '{{ namespace }}'
+      name: sample-http-6c94f59975-w89gd
