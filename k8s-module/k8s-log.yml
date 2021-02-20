@@ -9,4 +9,9 @@
       ca_cert: '{{ ca_cert_filepath }}'
       api_key: '{{ api_key }}'
       namespace: '{{ namespace }}'
-      name: sample-http-6c94f59975-w89gd
+      #name: sample-http-6c94f59975-w89gd
+
+      # nameのかわりにlabel_selectorsでラベル指定
+      label_selectors:
+        - app=sample-http
+      # 複数podがあっても1個しかlog取れてない気がする
