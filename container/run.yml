@@ -13,3 +13,12 @@
         volumes:
           - data:/volume-data
           - develop:/develop
+
+    - name: run container
+      community.docker.docker_container:
+        name: mount-from-sample
+        image: python:3
+        command: python -m http.server 8080
+
+        volumes_from:
+          - run-by-ansible
