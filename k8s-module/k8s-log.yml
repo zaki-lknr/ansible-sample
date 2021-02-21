@@ -16,5 +16,6 @@
       #   - app=sample-http
       # # 複数podがあっても1個しかlog取れてない気がする
 
-      kind: Deployment
-      name: sample-http
+      kind: Pod
+      name: '{{ item }}'
+    with_items: "{{ lookup('community.kubernetes.k8s', kind='Pod', namespace='rbac-sample', host=api_endpoint, api_key=api_key, ca_cert=ca_cert_filepath) | map(attribute='metadata.name') }}" 
