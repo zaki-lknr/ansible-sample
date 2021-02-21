@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+
+  tasks:
+  - name: lookup sample
+    vars:
+      pods: "{{ lookup('community.kubernetes.k8s', kind='Pod', namespace='rbac-sample') }}" 
+      # kubeconfigあるいは環境変数K8S_AUTH_***が設定されていれば動作する
+    debug:
+      msg: "{{ pods | map(attribute='metadata.name') }}"
