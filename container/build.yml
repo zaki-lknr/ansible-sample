@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: build image
+      community.docker.docker_image:
+        name: zakihmkc/squid:5.0.4-slpine-3.13 
+        source: build
+        build:
+          # path:以下にDockerfileを置く
+          path: ~/src/docker-images/squid/5.0.4-alpine-3.13/
