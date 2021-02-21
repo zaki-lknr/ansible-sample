@@ -9,3 +9,7 @@
         image: centos:7
         # state: present
         command: tail -f /dev/null
+
+        volumes:
+          - /volume-data
+          - /develop
