@@ -11,5 +11,5 @@
         command: tail -f /dev/null
 
         volumes:
-          - /volume-data
-          - /develop
+          - data:/volume-data
+          - develop:/develop
