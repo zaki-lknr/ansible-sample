@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: run container
+      community.docker.docker_container:
+        name: run-by-ansible
+        image: centos:7
+        # state: present
+        command: tail -f /dev/null
