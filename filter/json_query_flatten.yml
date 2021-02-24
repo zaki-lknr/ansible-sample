@@ -1,0 +1,63 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  vars:
+    json_data:
+      - item1
+      - item2
+      - subdata:
+        - 1
+        - 2
+        - 3
+      - - sublist1
+        - sublist2
+        - sublist3
+      - - - nested1
+        - - nested2
+        - - nested3
+
+  tasks:
+    - name: print data
+      debug:
+        msg: "{{ json_data }}"
+
+    - name: print flatten data
+      vars:
+        query: "[]"
+      debug:
+        msg: "{{ json_data | json_query(query) }}"
+      #### result
+      # msg:
+      # - item1
+      # - item2
+      # - subdata:
+      #   - 1
+      #   - 2
+      #   - 3
+      # - sublist1
+      # - sublist2
+      # - sublist3
+      # - - nested1
+      # - - nested2
+      # - - nested3
+
+    - name: print flatten*2 data
+      vars:
+        query: "[][]"
+      debug:
+        msg: "{{ json_data | json_query(query) }}"
+      #### result
+      # msg:
+      # - item1
+      # - item2
+      # - subdata:
+      #   - 1
+      #   - 2
+      #   - 3
+      # - sublist1
+      # - sublist2
+      # - sublist3
+      # - nested1
+      # - nested2
+      # - nested3
