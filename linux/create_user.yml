@@ -1,0 +1,23 @@
+---
+- hosts: server
+  gather_facts: false
+  become: true
+
+  tasks:
+  - name: create_user
+    ansible.builtin.user:
+      name: sample-user
+
+    ### result
+    # changed: [client-dev] => changed=true 
+    #   ansible_facts:
+    #     discovered_interpreter_python: /usr/bin/python
+    #   comment: ''
+    #   create_home: true
+    #   group: 1001
+    #   home: /home/sample-user
+    #   name: sample-user
+    #   shell: /bin/bash
+    #   state: present
+    #   system: false
+    #   uid: 1001
