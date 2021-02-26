@@ -7,6 +7,8 @@
   - name: create_user
     ansible.builtin.user:
       name: sample-user
+      # state: absent
+      # remove: true     # これを追加しないとホームディレクトリなどは残る
 
     ### result
     # changed: [client-dev] => changed=true 
