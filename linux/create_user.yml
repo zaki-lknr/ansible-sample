@@ -3,10 +3,14 @@
   gather_facts: false
   become: true
 
+  vars:
+    password_plain_str: 'p@ssword'
+
   tasks:
   - name: create_user
     ansible.builtin.user:
       name: sample-user
+      password: "{{ password_plain_str | password_hash }}"
       # state: absent
       # remove: true     # これを追加しないとホームディレクトリなどは残る
 
