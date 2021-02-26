@@ -4,13 +4,19 @@
   become: true
 
   vars:
-    password_plain_str: 'p@ssword'
+    password_plain_str: 'p@ssword!'
 
   tasks:
   - name: create_user
     ansible.builtin.user:
       name: sample-user
-      password: "{{ password_plain_str | password_hash }}"
+      # パスワード設定に関して：
+      # https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#how-do-i-generate-encrypted-passwords-for-the-user-module
+      # https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#encrypting-and-checksumming-strings-and-passwords
+      password: "{{ password_plain_str | password_hash('sha512') }}"
+      # https://github.com/ansible/ansible/blob/v2.10.5/lib/ansible/plugins/filter/core.py#L266
+      # ドキュメントに記載はないがhash_type省略時はsha512が使用される
+
       # state: absent
       # remove: true     # これを追加しないとホームディレクトリなどは残る
 
