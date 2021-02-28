@@ -1,0 +1,25 @@
+---
+- hosts: debian
+  gather_facts: false
+  become: true
+  become_method: su
+
+  # 初期状態debian向けplaybook
+  # - sudoのインストール
+  # - 指定ユーザーをsudoグループへ追加(デフォルトでwheel相当のグループがsudoという名前のグループ)
+  # 実行時にbecomeでsudoが使えないため、become_method: su 使用
+  # よって、-K を指定してrootのパスワードの入力を実行時に行う想定
+
+  tasks:
+  - name: install sudo
+    ansible.builtin.apt:
+      name:
+        - sudo
+      state: present
+
+  - name: update user group
+    ansible.builtin.user:
+      name: zaki
+      groups:
+      - sudo
+      append: true      # groupでないことに注意
