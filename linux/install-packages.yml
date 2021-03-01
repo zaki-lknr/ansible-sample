@@ -1,0 +1,17 @@
+---
+- hosts: debian
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: install packaged
+      ansible.builtin.apt:
+        name:
+          - open-vm-tools
+        state: present
+
+    - name: start vmware tools
+      ansible.builtin.systemd:
+        name: open-vm-tools
+        state: started
+        enabled: true
