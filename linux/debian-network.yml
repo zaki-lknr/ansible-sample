@@ -1,0 +1,18 @@
+---
+- hosts: debian
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: create interface file
+      copy:
+        dest: /etc/network/interfaces.d/ens224
+        content: |
+          #allow-hotplug ens224
+          auto ens224
+          iface ens224 inet static
+              address 172.16.0.42/23
+      # see: man interfaces
+
+    - name: start network
+      command: ifup ens224
