@@ -1,0 +1,12 @@
+---
+- hosts: rhel8
+  gather_facts: false
+  become: true
+
+  tasks:
+  - name: configure no password
+    copy:
+      dest: /etc/sudoers.d/nopass
+      mode: 0600
+      content: |
+        %wheel ALL=(ALL) NOPASSWD: ALL
