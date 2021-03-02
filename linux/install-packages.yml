@@ -1,6 +1,6 @@
 ---
 - hosts: debian
-  gather_facts: false
+  gather_facts: true
   become: true
 
   tasks:
@@ -9,6 +9,7 @@
         name:
           - open-vm-tools
         state: present
+      when: ansible_facts.pkg_mgr == 'apt'
 
     - name: start vmware tools
       ansible.builtin.systemd:
