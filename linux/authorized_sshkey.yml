@@ -1,0 +1,29 @@
+---
+- hosts: ubuntu
+  gather_facts: true
+
+  # 初期状態ubuntu向けplaybook
+  # - sshキー設定
+  # - sudoパス無し設定
+  # 実行時に-kKでユーザーパスワードを2回入力して実行する
+
+  tasks:
+  - name: install sudo
+    ansible.posix.authorized_key:
+      user: "{{ ansible_env.USER }}"
+      key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa_4096.pub' ) }}"
+
+  - name: update user group
+    ansible.builtin.user:
+      name: "{{ ansible_env.USER }}"
+      groups:
+      - sudo
+      append: true
+
+  - name: configure no password
+    become: true
+    copy:
+      dest: /etc/sudoers.d/nopass
+      mode: 0600
+      content: |
+        %sudo ALL=(ALL) NOPASSWD: ALL
