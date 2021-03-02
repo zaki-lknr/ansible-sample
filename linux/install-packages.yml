@@ -1,18 +1,26 @@
 ---
-- hosts: debian
+- hosts: servers
   gather_facts: true
   become: true
 
   tasks:
-    - name: install packaged
+    - name: install packaged (apt)
       ansible.builtin.apt:
         name:
           - open-vm-tools
         state: present
       when: ansible_facts.pkg_mgr == 'apt'
 
+    - name: install packaged (yum)
+      ansible.builtin.yum:
+        name:
+          - open-vm-tools
+        state: present
+      when: ansible_facts.pkg_mgr == 'yum' or ansible_facts.pkg_mgr == 'dnf'
+
     - name: start vmware tools
       ansible.builtin.systemd:
         name: open-vm-tools
         state: started
         enabled: true
+      when: ansible_facts.os_family == 'Debian'
