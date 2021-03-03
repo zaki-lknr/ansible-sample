@@ -9,14 +9,14 @@
         name:
           - open-vm-tools
         state: present
-      when: ansible_facts.pkg_mgr == 'apt'
+      when: ansible_facts.os_family == 'Debian'
 
     - name: install packaged (yum)
       ansible.builtin.yum:
         name:
           - open-vm-tools
         state: present
-      when: ansible_facts.pkg_mgr == 'yum' or ansible_facts.pkg_mgr == 'dnf'
+      when: ansible_facts.os_family == 'RedHat'
 
     - name: start vmware tools
       ansible.builtin.systemd:
