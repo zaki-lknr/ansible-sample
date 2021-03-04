@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: false
+  become: true
+
+  tasks:
+  - name: cron to user
+    ansible.builtin.cron:
+      name: sample_cron_conf
+      minute: "0"
+      hour: "*"
+      job: "date >> /tmp/cron-date-test.log"
