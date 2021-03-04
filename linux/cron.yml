@@ -10,3 +10,14 @@
       minute: "0"
       hour: "*"
       job: "date >> /tmp/cron-date-test.log"
+
+  - name: cron conf with file
+    ansible.builtin.cron:
+      name: cron_conf with cron_file
+      cron_file: ansible_sample
+      minute: "30"
+      hour: "*"
+      job: "date >> /tmp/cron-date-file.log"
+      user: root
+      # userは必要:
+      # msg: To use cron_file=... parameter you must specify user=... as well
