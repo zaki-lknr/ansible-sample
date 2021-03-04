@@ -1,0 +1,12 @@
+---
+- hosts: fedora
+  gather_facts: false
+  become: true
+
+  # SELinuxをpermissiveにする
+  # https://github.com/zaki-lknr/initialize-kubeadm-ansible/blob/master/playbooks/roles/install_kube_tools/tasks/main.yml#L14-L17
+  tasks:
+  - name: SELinux set permissive
+    ansible.posix.selinux:
+      policy: targeted
+      state: permissive
