@@ -7,3 +7,4 @@
       community.docker.docker_compose:
         project_src: ~/src/compose/sample/
         state: present
+        # state: absent  # absentはdown(停止してコンテナ削除)
