@@ -7,4 +7,7 @@
       community.docker.docker_compose:
         project_src: ~/src/compose/sample/
         state: present
+        stopped: true  # state: presentと併用、runningのコンテナを停止する
+        # コンテナが無い状態(一度もupしていない)で state: present + stopped: trueだと何も起きない
+
         # state: absent  # absentはdown(停止してコンテナ削除)
