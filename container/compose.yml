@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: exec compose
+      community.docker.docker_compose:
+        project_src: ~/src/compose/sample/
+        state: present
