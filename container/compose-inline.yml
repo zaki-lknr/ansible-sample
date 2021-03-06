@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: exec compose
+      community.docker.docker_compose:
+        project_name: sample   # docker-compose実行時のディレクトリ名に相当
+        definition:
+          version: '3'
+          services:
+            my-httpd:
+              image: httpd
+              ports:
+              - 1999:80
+            client:
+              image: centos:7
+              command:
+                - "tail"
+                - "-f"
+                - "/dev/null"
+        state: present
+        # state: absent # 削除
