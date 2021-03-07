@@ -18,3 +18,13 @@
         source: local
       # 何も設定せずにpushできた。
       # 多分実行ユーザーの~/.docker以下見てる。
+    # ↑ Ansible的にはokだけど、docker hubではイメージのlast pushedの時刻が更新される
+
+    - name: push image (other name)
+      # 別名でpush
+      community.docker.docker_image:
+        name: zakihmkc/squid:5.0.4-slpine-3.13 
+        repository: zakihmkc/squid:latest
+        push: yes
+        source: local
+        force_tag: yes  # これ無いと更新されなかった (要追加確認)
