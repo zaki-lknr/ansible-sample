@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: regex_replace
+      debug:
+        msg: "{{ item | regex_replace('softbank_?', '') }}"
+      with_items:
+        - softbank_hawks
+        - softbankhawks
+        - hawks
