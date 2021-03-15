@@ -1,0 +1,26 @@
+---
+- hosts: rhel8
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: configure nic
+      community.general.nmcli:
+        type: ethernet
+        conn_name: ens224
+        ip4: 172.16.0.41/23
+        state: present
+
+    # ↑のみだと以下ファイルが生成される。
+    # [zaki@rhel8-node ~]$ ls /etc/sysconfig/network-scripts/ifcfg-ens224 
+    # /etc/sysconfig/network-scripts/ifcfg-ens224
+    # ip a では確認できない。restartが必要
+
+    - name: restart nmcli
+      ansible.builtin.service:
+        name: NetworkManager
+        state: restarted
+    # これもダメだった。
+    # OSをrebootすれば変更された。
+
+    # ハテ
