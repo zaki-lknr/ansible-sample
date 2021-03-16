@@ -1,0 +1,14 @@
+- hosts: localhost
+  gather_facts: false
+  vars:
+    sample_str:
+      - spice
+      - curry
+      - tabetai
+
+  tasks:
+  - name: print result
+    debug:
+      msg: "{{ item }}"
+    with_items: "{{ sample_str }}"
+    when: "{{ item.startswith('sp') or item.endswith('ai') }}"
