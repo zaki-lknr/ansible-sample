@@ -6,4 +6,5 @@
     - role: sample
       tags: __parent_tag
     # __parent_tag 指定時はこのroleが呼ばれ、role内のtaskは全て実行される。
+    #              その際role内taskはnever併用でも__parent_tagが有効なため実行される。
     # __tag1 指定時もこのrole呼び出しは呼ばれ、role内では__tag1のみ実行される。

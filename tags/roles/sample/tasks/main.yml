@@ -8,3 +8,10 @@
   debug:
     msg: use __tag2
   tags: __tag2
+
+- name: never tag
+  debug:
+    msg: use never and tag3
+  tags:
+    - never
+    - __tag3
