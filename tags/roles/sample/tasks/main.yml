@@ -1,0 +1,10 @@
+---
+- name: roled task with __tag1
+  debug:
+    msg: use __tag1
+  tags: __tag1
+
+- name: task2 with __tag2
+  debug:
+    msg: use __tag2
+  tags: __tag2
