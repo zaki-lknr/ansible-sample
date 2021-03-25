@@ -1,0 +1,27 @@
+---
+- hosts: rhel8
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: absent nic
+      community.general.nmcli:
+        conn_name: ens224
+        state: absent
+
+    # ↑のみ実行後
+    # [zaki@rhel8-node ~]$ ls /etc/sysconfig/network-scripts/
+    # ifcfg-ens192
+    #
+    # [zaki@rhel8-node ~]$ ip a s ens224
+    # 3: ens224: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    #     link/ether 00:0c:29:8c:7e:2c brd ff:ff:ff:ff:ff:ff
+    #
+    # 設定は残る。
+
+    # - name: restart nmcli
+    #   ansible.builtin.service:
+    #     name: NetworkManager
+    #     state: restarted
+
+    ### ↑実行すると設定ファイルは無いのにDHCPで生き返る。。
