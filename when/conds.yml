@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+    cond1: true
+    cond2: true
+
+  roles:
+    - role: sample
+      when:
+        - cond1 is defined and cond1|bool
+        - cond2 is defined and cond2|bool

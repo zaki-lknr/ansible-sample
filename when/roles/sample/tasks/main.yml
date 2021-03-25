@@ -1,0 +1,20 @@
+---
+- name: roled task 1
+  debug:
+    msg: "cond1 {{cond1}} , cond2 {{cond2}}"
+
+- name: set cond2 to false
+  set_fact:
+    cond2: 0
+
+- name: roled task 2
+  debug:
+    msg: "cond1 {{cond1}} , cond2 {{cond2}}"
+
+- name: set cond2 to true
+  set_fact:
+    cond2: 1
+
+- name: roled task 3
+  debug:
+    msg: "cond1 {{cond1}} , cond2 {{cond2}}"
