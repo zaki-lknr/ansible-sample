@@ -9,6 +9,7 @@
         type: ethernet
         conn_name: ens224
         ip4: 172.16.0.41/23
+        dns4: 172.16.1.0
         state: present
       register: result
 
@@ -16,6 +17,8 @@
     # [zaki@rhel8-node ~]$ ls /etc/sysconfig/network-scripts/ifcfg-ens224 
     # /etc/sysconfig/network-scripts/ifcfg-ens224
     # ip a では確認できない。restartが必要
+
+    # dns4を追加すると、networkスクリプトにもDNS設定が追加される
 
     #############################
     # - name: restart nmcli
