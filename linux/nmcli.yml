@@ -10,17 +10,24 @@
         conn_name: ens224
         ip4: 172.16.0.41/23
         state: present
+      register: result
 
     # ↑のみだと以下ファイルが生成される。
     # [zaki@rhel8-node ~]$ ls /etc/sysconfig/network-scripts/ifcfg-ens224 
     # /etc/sysconfig/network-scripts/ifcfg-ens224
     # ip a では確認できない。restartが必要
 
-    - name: restart nmcli
-      ansible.builtin.service:
-        name: NetworkManager
-        state: restarted
-    # これもダメだった。
-    # OSをrebootすれば変更された。
+    #############################
+    # - name: restart nmcli
+    #   ansible.builtin.service:
+    #     name: NetworkManager
+    #     state: restarted
+    # # これもダメだった。
+    # # OSをrebootすれば変更された。
+    #
+    # # ハテ
+    #### nmcliの設定変更内容を適用するのに必要なのはサービスのrestartでなくnmcli con up
 
-    # ハテ
+    - name: update configure
+      command: nmcli con up ens224
+      when: result.changed
