@@ -1,0 +1,27 @@
+---
+- hosts: rhel8
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: install packaged
+      ansible.builtin.dnf:
+        name:
+          - httpd
+          - mod_ssl
+        state: present
+
+    - name: start httpd
+      ansible.builtin.systemd:
+        name: httpd
+        state: started
+        enabled: true
+
+    - name: firewalld (service)
+      ansible.posix.firewalld:
+        service: http
+        permanent: true
+        state: enabled
+        immediate: true
+      # この時点で設定反映される (immediate)
+      # rebootしても有効
