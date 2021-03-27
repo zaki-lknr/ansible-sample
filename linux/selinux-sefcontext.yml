@@ -8,4 +8,5 @@
     community.general.sefcontext:
       setype: httpd_sys_content_t
       # setype: admin_home_t
-      target: /root/www/zzz.html
+      # target: /root/www/zzz.html
+      target: '/root/www(/.*)?'
