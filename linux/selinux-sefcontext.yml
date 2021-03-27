@@ -1,0 +1,11 @@
+---
+- hosts: rhel8
+  gather_facts: false
+  become: true
+
+  tasks:
+  - name: SELinux set context
+    community.general.sefcontext:
+      setype: httpd_sys_content_t
+      # setype: admin_home_t
+      target: /root/www/zzz.html
