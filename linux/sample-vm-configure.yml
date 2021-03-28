@@ -1,0 +1,47 @@
+---
+- hosts: sample
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: configure no password
+      copy:
+        dest: /etc/sudoers.d/nopass
+        mode: 0600
+        content: |
+          %wheel ALL=(ALL) NOPASSWD: ALL
+
+    # - name: delete gateway ens224
+    #   community.general.nmcli:
+    #     type: ethernet
+    #     conn_name: ens224
+    #     gw4: 172.16.1.0
+    #     state: absent
+    #   register: result_ens224_del
+
+    - name: configure nic ens224
+      community.general.nmcli:
+        type: ethernet
+        conn_name: ens224
+        ip4: 172.16.0.37/23
+        dns4: 172.16.1.0
+        # gw4: 172.16.1.0
+        state: present
+      register: result_ens224
+
+    - name: configure nic ens256
+      community.general.nmcli:
+        type: ethernet
+        conn_name: ens256
+        ip4: 172.29.0.37/24
+        dns4: 172.29.0.10
+        gw4: 172.29.0.10
+        state: present
+      register: result_ens256
+
+    - name: update configure
+      command: nmcli con up ens224
+      when: result_ens224.changed #or result_ens224_del.changed
+    - name: update configure
+      command: nmcli con up ens256
+      when: result_ens256.changed
