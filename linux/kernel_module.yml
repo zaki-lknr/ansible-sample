@@ -1,0 +1,15 @@
+---
+- hosts: rhel8
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: load br_netfilter
+      community.general.modprobe:
+        name: br_netfilter
+        state: present
+
+      # 実行すると対象ノードは以下の通り
+      # $ lsmod  | grep netfilter
+      # br_netfilter           24576  0
+      # bridge                192512  1 br_netfilter
