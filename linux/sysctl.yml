@@ -6,9 +6,12 @@
   tasks:
     - name: configure sysctl
       ansible.posix.sysctl:
-        name: net.bridge.bridge-nf-call-iptables
+        name: net.ipv4.ip_forward
         value: "0"
         state: present
         # sysctl_set: false  # default
         # reload: true       # default
+        reload: false
         # sysctl_file: /etc/sysctl.d/k8s.conf
+
+        sysctl_set: true
