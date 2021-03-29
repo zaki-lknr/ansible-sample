@@ -8,6 +8,7 @@
       community.general.modprobe:
         name: br_netfilter
         state: present
+        # state: absent
 
       # 実行すると対象ノードは以下の通り
       # $ lsmod  | grep netfilter
