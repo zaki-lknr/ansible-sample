@@ -1,0 +1,11 @@
+---
+- hosts: "{{ host }}"
+  connection: "{{ conn }}"
+  gather_facts: "{{ gather }}"
+  vars:
+    host: rhel8
+    conn: ssh
+    gather: false
+
+  tasks:
+    - command: hostname
