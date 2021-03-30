@@ -1,0 +1,24 @@
+- hosts: servers
+  gather_facts: true
+  gather_subset:
+    - network
+
+  tasks:
+  - name: print ansible_host
+    debug:
+      msg:
+        - "{{ ansible_host }}"
+        - "{{ inventory_hostname }}"
+        - "{{ ansible_facts.interfaces }}"
+    #     - "{{ ansible_facts.default_ipv4 }}"
+    #     - "{{ ansible_facts.ens224.ipv4 }}"  # interface名が分かってるなら
+    #     - "{{ ansible_facts[nic].ipv4 }}"    # interface名を実行時に取得する(下記`nic`)
+    # vars:
+    #   nic: "{{ ansible_facts.interfaces[1] }}"
+
+  - name: print ansible_host2
+    vars:
+      # nic: "{{ ansible_facts.interfaces[2] }}"
+      nic: ens224
+    debug:
+      msg: "{{ ansible_facts[nic].ipv4 }}"
