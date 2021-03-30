@@ -1,5 +1,7 @@
-- hosts: manager-hosts
+- hosts: servers
   gather_facts: true
+  gather_subset:
+    - network
 
   tasks:
   - name: print ansible_host
@@ -7,4 +9,48 @@
       msg:
         - "{{ ansible_host }}"
         - "{{ inventory_hostname }}"
-        - "{{ ansible_facts.default_ipv4 }}"  # <- gather_facts: false だと参照不可
+        - "{{ ansible_facts }}"  # <- gather_facts: false だと参照不可
+
+  - name: create hosts info
+    copy:
+      content: |
+        hoge
+        #{{ inventory_hostname }}
+
+        # groups
+        {{ groups }}
+
+        # ansible_inventory_sources (using inventory filename list)
+        {{ ansible_inventory_sources }}
+
+        # ansible_play_hosts (active hosts list)
+        {{ ansible_play_hosts }}
+
+        # ansible_play_hosts_all (active hosts list include unreache)
+        {{ ansible_play_hosts_all }}
+
+        # --------
+        
+        {% for host in ansible_play_hosts_all %}
+        ## host
+        {{ host }}
+
+        # hostvars[host].inventory_hostname
+        {{ hostvars[host].inventory_hostname }}
+
+        # hostvars[host].ansible_facts.default_ipv4.address
+        {{ hostvars[host].ansible_facts.default_ipv4.address }}
+
+        # hostvars[host].ansible_facts.default_ipv4
+        {{ hostvars[host].ansible_facts.default_ipv4 }}
+
+        # hostvars[host].ansible_facts.ens224.ipv4
+        {{ hostvars[host].ansible_facts.ens224.ipv4 }}
+
+        # hostvars[host].ansible_host   <- これはインベントリに記述が無いと未定義となる
+        {# hostvars[host].ansible_host #}
+        # ----
+        {% endfor %}
+      dest: /var/tmp/sample-file.txt
+    delegate_to: localhost
+    run_once: true
