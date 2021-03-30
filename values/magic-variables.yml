@@ -1,0 +1,13 @@
+---
+- hosts: servers
+  gather_facts: false
+
+  tasks:
+    - name: print 
+      debug:
+        msg:
+          - "ansible_play_batch: {{ ansible_play_batch }}"
+          - "ansible_play_hosts: {{ ansible_play_hosts }}"
+          - "ansible_play_hosts_all: {{ ansible_play_hosts_all }}"
+          - "ansible_host: {{ ansible_host }}"  # ansible_hostがあればそのアドレス。なければターゲットホスト名
+          - "inventory_hostname: {{ inventory_hostname }}" # ターゲットホスト名
