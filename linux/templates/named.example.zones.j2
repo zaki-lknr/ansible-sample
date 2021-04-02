@@ -7,6 +7,6 @@ $TTL 3600
                                 3600 )          ; Minimum
             IN      NS      ns.example.org.
 ns          IN      A       172.16.0.41
-rhel8-node  IN      A       172.16.0.41
-debian-node IN      A       172.16.0.42
-ubuntu-node IN      A       172.16.0.43
+{% for host in ansible_play_hosts_all %}
+{{ host }}  IN      A       {{ hostvars[host].ansible_facts.ens224.ipv4.address }}
+{% endfor %}

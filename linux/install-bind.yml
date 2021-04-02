@@ -1,6 +1,6 @@
 ---
 - hosts: rhel8
-  gather_facts: true
+  gather_facts: false
   become: true
 
   tasks:
@@ -24,11 +24,20 @@
         state: enabled
         immediate: true
 
+- hosts: servers
+  gather_facts: true
+  gather_subset:
+    - network
+  become: true
+
+  tasks:
     - name: create zonefile
       ansible.builtin.template:
         src: templates/named.example.zones.j2
         dest: /etc/named/named.example.zones
         group: named
+      delegate_to: rhel8-node
+      run_once: true
 
     - name: append zonefile include
       ansible.builtin.blockinfile:
@@ -39,8 +48,12 @@
               type master;
               file "/etc/named/named.example.zones";
           };
+      delegate_to: rhel8-node
+      run_once: true
 
     - name: restart bind
       ansible.builtin.systemd:
         name: named
         state: restarted
+      delegate_to: rhel8-node
+      run_once: true
