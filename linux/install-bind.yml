@@ -31,29 +31,27 @@
   become: true
 
   tasks:
-    - name: create zonefile
-      ansible.builtin.template:
-        src: templates/named.example.zones.j2
-        dest: /etc/named/named.example.zones
-        group: named
+    - name: configure_bind_block
       delegate_to: rhel8-node
       run_once: true
+      block:
+      - name: create zonefile
+        ansible.builtin.template:
+          src: templates/named.example.zones.j2
+          dest: /etc/named/named.example.zones
+          group: named
 
-    - name: append zonefile include
-      ansible.builtin.blockinfile:
-        path: /etc/named.conf
-        marker: // example.org zone {mark}
-        block: |
-          zone "example.org" {
-              type master;
-              file "/etc/named/named.example.zones";
-          };
-      delegate_to: rhel8-node
-      run_once: true
+      - name: append zonefile include
+        ansible.builtin.blockinfile:
+          path: /etc/named.conf
+          marker: // example.org zone {mark}
+          block: |
+            zone "example.org" {
+                type master;
+                file "/etc/named/named.example.zones";
+            };
 
-    - name: restart bind
-      ansible.builtin.systemd:
-        name: named
-        state: restarted
-      delegate_to: rhel8-node
-      run_once: true
+      - name: restart bind
+        ansible.builtin.systemd:
+          name: named
+          state: restarted
