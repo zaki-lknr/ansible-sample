@@ -1,0 +1,20 @@
+---
+- hosts: ubuntu
+  gather_facts: false
+  environment:
+    DOCKER_HOST: unix:///run/user/1000/docker.sock
+
+  tasks:
+    - name: push image (other name)
+      community.docker.docker_login:
+        registry_url: gitlab-ce.example.org:25000
+        username: cloud-user
+        password: "{{ lookup('env', 'REGISTRY_PASSWORD') }}"
+
+    - name: push image (other name)
+      # 別名でpush
+      community.docker.docker_image:
+        name: zakihmkc/squid:4.11-alpine-3.12
+        repository: gitlab-ce.example.org:25000/cloud-user/mysquid/squid:4.11-alpine-3.12
+        push: yes
+        source: local
