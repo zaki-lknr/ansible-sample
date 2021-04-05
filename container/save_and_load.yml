@@ -19,3 +19,25 @@
         source: pull
         archive_path: ~/work/squid_4.11-alpine-3.12.tar
       delegate_to: localhost
+
+    - name: create directory
+      ansible.builtin.file:
+        path: ~/images/
+        state: directory
+    - name: copy image to remote
+      ansible.builtin.copy:
+        src: ~/work/squid_4.11-alpine-3.12.tar
+        dest: ~/images/squid_4.11-alpine-3.12.tar
+
+    - name: pip install docker
+      ansible.builtin.pip:
+        name: docker
+
+    - name: load image
+      community.docker.docker_image:
+        name: zakihmkc/squid
+        tag: 4.11-alpine-3.12
+        load_path: ~/images/squid_4.11-alpine-3.12.tar
+        source: load
+      environment:
+        DOCKER_HOST: unix:///run/user/1000/docker.sock
