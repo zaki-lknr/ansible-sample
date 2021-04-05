@@ -1,0 +1,13 @@
+---
+- hosts: ubuntu
+  gather_facts: false
+  environment:
+    DOCKER_HOST: unix:///run/user/1000/docker.sock
+
+  tasks:
+    - name: login to gitlab container registry
+      community.docker.docker_login:
+        registry_url: gitlab-ce.example.org:25000
+        username: cloud-user
+        password: "{{ lookup('env', 'REGISTRY_PASSWORD') }}"
+      # ${HOME}/.docker/config.jsonが更新される
