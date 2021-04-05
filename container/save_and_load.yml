@@ -1,0 +1,21 @@
+---
+- hosts: ubuntu
+  gather_facts: false
+
+  tasks:
+    - name: build on local
+      community.docker.docker_image:
+        name: zakihmkc/squid
+        tag: 4.11-alpine-3.12
+        source: build
+        build:
+          path: ~/src/docker-images/squid/4.11-alpine-3.12/
+      delegate_to: localhost
+
+    - name: save image to local
+      community.docker.docker_image:
+        name: zakihmkc/squid
+        tag: 4.11-alpine-3.12
+        source: pull
+        archive_path: ~/work/squid_4.11-alpine-3.12.tar
+      delegate_to: localhost
