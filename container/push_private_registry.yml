@@ -2,6 +2,7 @@
 - hosts: ubuntu
   gather_facts: false
   environment:
+    # DOCKER_CONFIG: /home/zaki/config   # docker_loginは効かない
     DOCKER_HOST: unix:///run/user/1000/docker.sock
 
   tasks:
@@ -10,6 +11,7 @@
         registry_url: gitlab-ce.example.org:25000
         username: cloud-user
         password: "{{ lookup('env', 'REGISTRY_PASSWORD') }}"
+        config_path: /var/tmp/config/docker/config.json
 
     - name: push image (other name)
       # 別名でpush
@@ -18,3 +20,5 @@
         repository: gitlab-ce.example.org:25000/cloud-user/mysquid/squid:4.11-alpine-3.12
         push: yes
         source: local
+      environment:
+        DOCKER_CONFIG: /var/tmp/config/docker/
