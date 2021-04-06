@@ -1,0 +1,36 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: clear log
+      file:
+        path: async.log
+        state: absent
+
+    - name: async loop
+      shell: echo "{{ item }} begin" >> async.log; sleep "{{ item }}"; echo "{{ item }} end" >> async.log
+      loop:
+        - 2
+        - 3
+        - 4
+      async: 1
+      poll: 0
+      register: result_async
+
+    # - name: debug_print
+    #   debug:
+    #     msg: '{{ result_async.results }}'
+
+    - name: wait
+      ansible.builtin.async_status:
+        jid: "{{ item.ansible_job_id }}"
+      loop: "{{ result_async.results }}"
+      register: async_poll_results
+      until: async_poll_results.finished
+      retries: 10
+      delay: 1
+
+    - name: debug_print
+      debug:
+        msg: '{{ async_poll_results }}'
