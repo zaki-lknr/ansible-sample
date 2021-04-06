@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: async pool
+      shell: echo "start" >> async-poll.log; sleep 10; echo "end" >> async-poll.log
+      async: 4
+      poll: 1
+
+      # poll秒ごとに実行結果をチェック、async秒経過しても完了していない場合は失敗で終了。
+      #
+      # fatal: [localhost]: FAILED! => changed=false 
+      # msg: async task did not complete within the requested time - 4s
