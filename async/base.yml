@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: async loop
+      shell: echo "start {{ item }}"; sleep "{{ item }}"; echo "end {{ item }}"
+      loop:
+        - 3
+        - 3
+        - 3
+    # 順次実行される
