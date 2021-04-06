@@ -1,0 +1,18 @@
+---
+- hosts: containers
+  gather_facts: no
+  # connection: docker
+  # vars:
+  #   ansible_connection: docker
+
+  tasks:
+  - name: exec ls
+    raw: ls
+
+  - name: which python
+    raw: which python
+    ignore_errors: true
+
+  - name: exec ls /zzz
+    raw: ls /zzz
+    ignore_errors: true
