@@ -25,3 +25,14 @@
         immediate: true
       # この時点で設定反映される (immediate)
       # rebootしても有効
+
+    - name: create content
+      ansible.builtin.copy:
+        dest: /var/www/html/sample.html
+        content: |
+          <html>
+          <body>
+          <h1>curry world</h1>
+          </body>
+          </html>
+    # この時点で http://192.168.0.41/sample.html アクセス可能
