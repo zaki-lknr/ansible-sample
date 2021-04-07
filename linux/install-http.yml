@@ -36,3 +36,7 @@
           </body>
           </html>
     # この時点で http://192.168.0.41/sample.html アクセス可能
+
+    - name: wget content
+      ansible.builtin.uri:
+        url: http://192.168.0.41/sample.html
