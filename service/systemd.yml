@@ -1,0 +1,19 @@
+---
+- hosts: rhel8
+  gather_facts: false
+  become: true
+
+  tasks:
+    # - name: start httpd
+    #   ansible.builtin.systemd:
+    #     name: httpd
+    #     state: started
+    #     enabled: true
+    #     masked: false
+
+    - name: disable httpd
+      ansible.builtin.systemd:
+        name: httpd
+        state: stopped
+        enabled: false
+        masked: true
