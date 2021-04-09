@@ -26,17 +26,22 @@
       # この時点で設定反映される (immediate)
       # rebootしても有効
 
+    - name: create directory
+      ansible.builtin.file:
+        state: directory
+        path: /var/www/html/sample
+
     - name: create content
       ansible.builtin.copy:
-        dest: /var/www/html/sample.html
+        dest: /var/www/html/sample/sample.html
         content: |
           <html>
           <body>
           <h1>curry world</h1>
           </body>
           </html>
-    # この時点で http://192.168.0.41/sample.html アクセス可能
+    # この時点で http://192.168.0.41/sample/sample.html アクセス可能
 
     - name: wget content
       ansible.builtin.uri:
-        url: http://192.168.0.41/sample.html
+        url: http://192.168.0.41/sample/sample.html
