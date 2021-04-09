@@ -45,3 +45,27 @@
     - name: wget content
       ansible.builtin.uri:
         url: http://192.168.0.41/sample/sample.html
+
+    - name: create htpaccess
+      ansible.builtin.copy:
+        dest: /var/www/html/sample/.htaccess
+        content: |
+          AuthType Basic
+          Authname "htpasswd sample"
+          AuthUserfile /var/www/html/sample/.htpasswd
+          AuthGroupFile /dev/null
+          require valid-user
+
+    - name: install passlib
+      pip:
+        name: passlib
+        virtualenv: /root/venv
+        virtualenv_command: python3 -m venv
+
+    - name: create htpasswd
+      community.general.htpasswd:
+        path: /var/www/html/sample/.htpasswd
+        name: zaki
+        password: 'p@ssw0rd!'
+      environment:
+        PYTHONPATH: /root/venv/lib/python3.6/site-packages/
