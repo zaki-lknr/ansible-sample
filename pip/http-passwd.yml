@@ -1,0 +1,24 @@
+---
+- hosts: rhel8
+  gather_facts: false
+
+  tasks:
+    - name: install passlib
+      pip:
+        name: passlib
+        virtualenv: /home/zaki/venv
+        virtualenv_command: python3 -m venv
+
+    - name: create work dir
+      ansible.builtin.file:
+        path: /home/zaki/sample-web
+        state: directory
+
+    - name: create htpasswd
+      community.general.htpasswd:
+        path: /home/zaki/sample-web/htpasswd
+        name: zaki
+        password: 'p@ssw0rd!'
+      environment:
+        PYTHONPATH: /home/zaki/venv/lib/python3.6/site-packages/
+        # venvでつくったパス
