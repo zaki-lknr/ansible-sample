@@ -1,0 +1,22 @@
+---
+- hosts: ubuntu
+  gather_facts: false
+
+  tasks:
+    - name: pip install docker
+      pip:
+        name: docker
+      # すでに入ってるのでok
+
+    - name: pip install virtualenv
+      pip:
+        name: virtualenv
+      # user権限なので$HOME/.local/binに入る
+
+    - name: virtualenv
+      pip:
+        name: docker
+        virtualenv: /home/zaki/venv
+        # fatal: [ubuntu-node]: FAILED! => changed=false 
+        #   msg: 'Failed to find required executable virtualenv in paths: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'
+        virtualenv_command: /home/zaki/.local/bin/virtualenv
