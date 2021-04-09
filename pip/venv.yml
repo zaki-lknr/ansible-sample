@@ -1,0 +1,10 @@
+---
+- hosts: rhel8
+  gather_facts: false
+
+  tasks:
+    - name: virtualenv
+      pip:
+        name: docker
+        virtualenv: /home/zaki/venv
+        virtualenv_command: python3 -m venv
