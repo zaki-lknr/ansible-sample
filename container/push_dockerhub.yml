@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: push image
+      community.docker.docker_image:
+        name: zakihmkc/squid:5.0.5-alpine-3.13
+        push: yes
+        source: local
+      # ↑ 2回目の実行はAnsible的にはokだけど、docker hubではイメージのlast pushedの時刻が更新される
+
+    - name: push image (other name)
+      # 別名でpush
+      community.docker.docker_image:
+        name: zakihmkc/squid:5.0.5-alpine-3.13
+        repository: zakihmkc/squid:latest
+        push: yes
+        source: local
