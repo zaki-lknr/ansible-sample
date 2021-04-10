@@ -1,0 +1,11 @@
+---
+- hosts: ubuntu
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: start sockserv
+      ansible.builtin.systemd:
+        name: sockserv
+        state: started
+        daemon_reload: true
