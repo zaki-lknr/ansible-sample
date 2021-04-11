@@ -1,0 +1,15 @@
+---
+- hosts: vyos
+  gather_facts: false
+
+  tasks:
+    - name: vyos_fact
+      vyos.vyos.vyos_facts:
+        gather_subset: config
+      # register: result
+
+    - name: print config
+      debug:
+        # msg: "{{ result.ansible_facts.ansible_net_config }}"
+        msg: "{{ ansible_net_config }}"
+
