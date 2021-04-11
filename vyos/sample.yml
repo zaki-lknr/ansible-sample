@@ -31,3 +31,7 @@
       debug:
         # msg: "{{ result.ansible_facts.ansible_net_config }}"
         msg: "{{ ansible_net_config }}"
+
+    - name: save config
+      vyos.vyos.vyos_config:
+        save: true
