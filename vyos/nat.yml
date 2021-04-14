@@ -1,0 +1,19 @@
+---
+- hosts: vyos
+  gather_facts: false
+
+  tasks:
+
+    # - name: configure nat (B to A)
+    #   vyos.vyos.vyos_config:
+    #     lines:
+    #       - set nat source rule 100 outbound-interface eth0
+    #       - set nat source rule 100 destination address 172.16.0.0/23
+    #       - set nat source rule 100 translation address masquerade
+
+    - name: configure nat (A to B)
+      vyos.vyos.vyos_config:
+        lines:
+          - set nat source rule 110 outbound-interface eth1
+          - set nat source rule 110 destination address 172.29.0.0/24
+          - set nat source rule 110 translation address masquerade
