@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: run container
+      community.docker.docker_container:
+        name: httpd-server
+        image: httpd:latest
+        ports:
+        - 29008:80  # host:container
