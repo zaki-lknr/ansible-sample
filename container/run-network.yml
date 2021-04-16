@@ -1,0 +1,29 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    # docker networkを作成
+    - name: Create a network
+      community.docker.docker_network:
+        name: nw_by_ansible
+
+    # network指定でコンテナデプロイ
+    - name: run container
+      community.docker.docker_container:
+        name: httpd-server
+        image: httpd:latest
+        ports:
+        - 29018:80  # host:container
+        networks:
+        - name: nw_by_ansible
+
+    # コンテナ間通信用サンプルコンテナを追加
+    - name: run container
+      community.docker.docker_container:
+        name: run-by-ansible
+        image: centos:7
+        # state: present
+        command: tail -f /dev/null
+        networks:
+        - name: nw_by_ansible
