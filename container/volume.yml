@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    # docker volumeを作成
+    - name: Create a volume
+      community.docker.docker_volume:
+        name: volume_sample
+
+    # 作成したvolumeをマウント (指定されたボリュームが無い場合は自動生成されるが)
+    - name: run container with volume
+      community.docker.docker_container:
+        name: volume_sample_container
+        image: python:3
+        command: python -m http.server 8080
+
+        volumes:
+          - volume_sample:/volume
