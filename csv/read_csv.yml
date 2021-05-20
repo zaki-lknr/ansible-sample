@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: read csv file
+    read_csv:
+      path: zairyo.csv
+    register: res_input
+
+  - name: print result
+    debug:
+      msg: "{{ res_input }}"
