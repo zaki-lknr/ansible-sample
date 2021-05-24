@@ -1,0 +1,66 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  vars:
+    netbox_url: http://192.168.0.18:8000/
+    netbox_token: 0123456789abcdef0123456789abcdef01234567
+
+    site:
+      name: sample site
+      slug: sample-slug
+    device_role:
+      name: sample dev role
+      slug: sample-dev-role
+    manufacturer:
+      name: sample manufacturer
+      slug: sample-manufacturer
+    device_type:
+      model: sample dev type
+      slug: sample-dev-type
+    device:
+      name: sample device
+
+  tasks:
+    - name: create site
+      netbox.netbox.netbox_site:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ site.name }}"
+          slug: "{{ site.slug }}"
+
+    - name: create device role
+      netbox.netbox.netbox_device_role:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ device_role.name }}"
+          slug: "{{ device_role.slug }}"
+
+    - name: create manufacturers
+      netbox.netbox.netbox_manufacturer:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ manufacturer.name }}"
+          slug: "{{ manufacturer.slug }}"
+
+    - name: create device type
+      netbox.netbox.netbox_device_type:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          slug: "{{ device_type.slug }}"
+          model: "{{ device_type.model }}"
+          manufacturer: "{{ manufacturer.slug }}"
+
+    - name: create device
+      netbox.netbox.netbox_device:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ device.name }}"
+          device_type: "{{ device_type.slug }}"
+          device_role: "{{ device_role.slug }}"
+          site: "{{ site.slug }}"
