@@ -18,8 +18,15 @@
     device_type:
       model: sample dev type
       slug: sample-dev-type
+      subdevice_role: parent
     device:
       name: sample device
+      bay_slot:  # device bay用定義 (スロットの定義)
+        - slot1
+        - slot2
+        - slot3
+        - slot4
+        - slot5
 
   tasks:
     - name: create site
@@ -54,6 +61,7 @@
           slug: "{{ device_type.slug }}"
           model: "{{ device_type.model }}"
           manufacturer: "{{ manufacturer.slug }}"
+          subdevice_role: "{{ device_type.subdevice_role }}"
 
     - name: create device
       netbox.netbox.netbox_device:
@@ -64,3 +72,16 @@
           device_type: "{{ device_type.slug }}"
           device_role: "{{ device_role.slug }}"
           site: "{{ site.slug }}"
+
+    # device bayへスロット作成 (子デバイスを登録するための箱の定義)
+    # https://netbox.readthedocs.io/en/stable/core-functionality/devices/#device-bays
+    # 対象デバイスのdevice typeでparent/childの設定がparentになっている必要がある
+    - name: create device bay slot
+      netbox.netbox.netbox_device_bay:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          device: "{{ device.name }}"
+          name: "{{ item }}"
+        state: present
+      loop: "{{ device.bay_slot }}"

@@ -1,6 +1,8 @@
 # source
 
-- create-device-resources.yml: デバイスを登録するまでに必要なSite/DeviceRole/Manufacturer/DeviceTypeとDeviceを作成
+- create-device-resources.yml:
+    - デバイスを登録するまでに必要なSite/DeviceRole/Manufacturer/DeviceTypeとDeviceを作成
+    - からの、device bay情報登録
 
 # コレクションのupdate
 
