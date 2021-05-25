@@ -27,6 +27,14 @@
         - slot3
         - slot4
         - slot5
+    child_device:
+      type:
+        model: sample child dev type
+        slug: sample-child-dev-type
+        subdevice_role: child
+      device:
+        - name: child_device01
+        - name: child_device02
 
   tasks:
     - name: create site
@@ -85,3 +93,26 @@
           name: "{{ item }}"
         state: present
       loop: "{{ device.bay_slot }}"
+
+
+    - name: "[[CHILD]] create device type"
+      netbox.netbox.netbox_device_type:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          slug: "{{ child_device.type.slug }}"
+          model: "{{ child_device.type.model }}"
+          manufacturer: "{{ manufacturer.slug }}"
+          subdevice_role: "{{ child_device.type.subdevice_role }}"
+          u_height: 0
+
+    - name: "[[CHILD]] create device"
+      netbox.netbox.netbox_device:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ item.name }}"
+          device_type: "{{ child_device.type.slug }}"
+          device_role: "{{ device_role.slug }}"
+          site: "{{ site.slug }}"
+      loop: "{{ child_device.device }}"
