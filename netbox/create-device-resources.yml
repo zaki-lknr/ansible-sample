@@ -22,11 +22,16 @@
     device:
       name: sample device
       bay_slot:  # device bay用定義 (スロットの定義)
-        - slot1
-        - slot2
-        - slot3
-        - slot4
-        - slot5
+        - name: slot1
+          desc: device slot1]
+        - name: slot2
+          desc: device slot2
+        - name: slot3
+          desc: device slot3
+        - name: slot4
+          desc: device slot4
+        - name: slot5
+          desc: device slot5
     child_device:
       type:
         model: sample child dev type
@@ -90,7 +95,8 @@
         netbox_token: "{{ netbox_token }}"
         data:
           device: "{{ device.name }}"
-          name: "{{ item }}"
+          name: "{{ item.name }}"
+          description: "{{ item.desc }}"
         state: present
       loop: "{{ device.bay_slot }}"
 
@@ -125,7 +131,7 @@
         netbox_token: "{{ netbox_token }}"
         data:
           device: "{{ device.name }}"
-          name: "{{ device.bay_slot[0] }}"
+          name: "{{ device.bay_slot[0].name }}"
           installed_device: "{{ child_device.device[0].name }}"
           # installed_device: child_device_xx  # 存在しないデバイスは当然だけど登録不可
         state: present
