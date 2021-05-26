@@ -1,0 +1,20 @@
+---
+- hosts: linux
+  gather_facts: false
+  # environment:
+  #   PYTHONPATH: /home/zaki/venv/lib/python3.9/site-packages/
+  # vars:
+  #   ansible_python_interpreter: /home/zaki/tmp/venv/bin/python
+
+  tasks:
+    - name: get cluster info
+      community.kubernetes.k8s_cluster_info:
+      # environment:
+      #   PYTHONPATH: /home/zaki/venv/lib/python3.9/site-packages/
+      # vars:
+      #   ansible_python_interpreter: /home/zaki/tmp/venv/bin/python
+      register: result
+
+    - name: print result
+      debug:
+        msg: "{{ result.version }}"
