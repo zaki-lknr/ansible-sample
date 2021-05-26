@@ -40,6 +40,17 @@
       device:
         - name: child_device01
         - name: child_device02
+    new_device:
+      parent:
+        name: parent_dev10
+        bay:
+          - name: slot1
+            dev: child_dev10
+          - name: slot2
+            dev: child_dev11
+      child:
+        - name: child_dev10
+        - name: child_dev11
 
   tasks:
     - name: create site
@@ -135,3 +146,32 @@
           installed_device: "{{ child_device.device[0].name }}"
           # installed_device: child_device_xx  # 存在しないデバイスは当然だけど登録不可
         state: present
+
+    # デバイス登録
+    - name: create device2
+      netbox.netbox.netbox_device:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ item.name }}"
+          device_type: "{{ item.type }}"
+          device_role: "{{ device_role.slug }}"
+          site: "{{ site.slug }}"
+      loop:
+        - name: "{{ new_device.parent.name }}"
+          type: "{{ device_type.slug }}"
+        - name: "{{ new_device.child[0].name }}" # ズル
+          type: "{{ child_device.type.slug }}"   # ズル
+        - name: "{{ new_device.child[1].name }}" # ズル
+          type: "{{ child_device.type.slug }}"   # ズル
+    # デバイスベイ登録(親・子まとめて同時)
+    - name: create devicebay with child
+      netbox.netbox.netbox_device_bay:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          device: "{{ new_device.parent.name }}"
+          name: "{{ item.name }}"
+          installed_device: "{{ item.dev }}"
+        state: present
+      loop: "{{ new_device.parent.bay }}"
