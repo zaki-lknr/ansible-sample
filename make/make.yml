@@ -1,0 +1,18 @@
+---
+- hosts: linux
+  gather_facts: false
+
+  tasks:
+    - name: git clone
+      ansible.builtin.git:
+        repo: https://github.com/zaki-lknr/usansible.git
+        dest: /home/zaki/src
+
+    - name: install zip
+      ansible.builtin.apt:
+        name: zip
+      become: true
+
+    - name: make
+      community.general.make:
+        chdir: /home/zaki/src
