@@ -20,3 +20,25 @@
   - name: print result
     debug:
       msg: "{{ res_input }}"
+
+  # - name: read csv with blank data file
+  #   read_csv:
+  #     path: vaarg.csv
+  #   register: res_input
+
+  # - name: print result
+  #   debug:
+  #     msg: "{{ res_input }}"
+
+    # result
+    # こうなる
+    # --------
+    # list:
+    # - data1: a
+    #   data2: b
+    #   data3: c
+    # - data1: aa
+    #   data2: bb
+    #   data3: cc
+    #   'null':
+    #   - dd
