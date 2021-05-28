@@ -11,3 +11,12 @@
   - name: print result
     debug:
       msg: "{{ res_input }}"
+
+  - name: read csv with blank data file
+    read_csv:
+      path: blank_column.csv
+    register: res_input
+
+  - name: print result
+    debug:
+      msg: "{{ res_input }}"
