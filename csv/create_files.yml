@@ -27,15 +27,12 @@
           mode: null
         - path: /var/tmp/ansible/var_test/file1
           type: touch
-          owner: '{{ omit }}'
-          group: '{{ omit }}'
-          mode: ~
     ansible.builtin.file:
       state: "{{ item.type }}"
       path: "{{ item.path }}"
-      mode: "{{ item.mode }}"
-      owner: "{{ item.owner }}"
-      group: "{{ item.group }}"
+      mode: "{{ item.mode | default(omit) }}"
+      owner: "{{ item.owner | default(omit) }}"
+      group: "{{ item.group | default(omit) }}"
     loop: "{{ files }}"
 
   # - name: create files by csv
