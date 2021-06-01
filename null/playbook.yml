@@ -1,0 +1,28 @@
+- hosts: localhost
+  gather_facts: false
+
+  vars:
+    data:
+      j2_none: "{{ none }}"
+      j2_l_none: "{{ None }}"
+      # j2_null: "{{ null }}"  # undefined
+      omit: "{{ omit }}"
+      undef: undefined
+      blank: ""
+      tilde: ~
+      nullval: null
+
+  tasks:
+  - name: print
+    debug:
+      msg: "{{ data }}"
+
+#### result
+# ok: [localhost] => 
+#   msg:
+#     blank: ''
+#     j2_l_none: ''
+#     j2_none: ''
+#     nullval: null
+#     tilde: null
+#     undef: undefined
