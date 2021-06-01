@@ -11,7 +11,17 @@
   - name: print result
     debug:
       msg: "{{ res_input }}"
+  - name: create files by csv
+    ansible.builtin.file:
+      state: "{{ item.type }}"
+      path: "{{ item.path }}"
+      mode: "{{ item.mode | default(omit, true) }}"
+      owner: "{{ item.owner | default(omit, true) }}"
+      group: "{{ item.group | default(omit, true) }}"
+    loop: "{{ res_input.list }}"
 
+
+  # omit確認
   - name: create files by vars
     vars:
       files:
@@ -34,12 +44,3 @@
       owner: "{{ item.owner | default(omit) }}"
       group: "{{ item.group | default(omit) }}"
     loop: "{{ files }}"
-
-  # - name: create files by csv
-  #   ansible.builtin.file:
-  #     state: "{{ item.type }}"
-  #     path: "{{ item.path }}"
-  #     mode: "{{ item.mode | default(omit, true) }}"
-  #     owner: "{{ item.owner | default(omit, true) }}"
-  #     group: "{{ item.group | default(omit, true) }}"
-  #   loop: "{{ res_input.list }}"
