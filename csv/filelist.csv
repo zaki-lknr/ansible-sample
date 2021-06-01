@@ -1,0 +1,4 @@
+path,type,owner,group,mode
+/var/tmp/ansible/csv_test,directory,zaki,zaki,0755
+/var/tmp/ansible/csv_test2,directory,,,
+/var/tmp/ansible/csv_test/file1,touch,,,

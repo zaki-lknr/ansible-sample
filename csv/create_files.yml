@@ -1,0 +1,48 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: read csv file
+    ansible.builtin.read_csv:
+      path: filelist.csv
+    register: res_input
+
+  - name: print result
+    debug:
+      msg: "{{ res_input }}"
+
+  - name: create files by vars
+    vars:
+      files:
+        - path: /var/tmp/ansible/var_test
+          type: directory
+          owner: zaki
+          group: zaki
+          mode: '0755'
+        - path: /var/tmp/ansible/var_test2
+          type: directory
+          owner: '{{ omit }}'  # owner/groupは空文字・null不可
+          group: '{{ omit }}'
+          mode: null
+        - path: /var/tmp/ansible/var_test/file1
+          type: touch
+          owner: '{{ omit }}'
+          group: '{{ omit }}'
+          mode: ~
+    ansible.builtin.file:
+      state: "{{ item.type }}"
+      path: "{{ item.path }}"
+      mode: "{{ item.mode }}"
+      owner: "{{ item.owner }}"
+      group: "{{ item.group }}"
+    loop: "{{ files }}"
+
+  # - name: create files by csv
+  #   ansible.builtin.file:
+  #     state: "{{ item.type }}"
+  #     path: "{{ item.path }}"
+  #     mode: "{{ item.mode | default(omit, true) }}"
+  #     owner: "{{ item.owner | default(omit, true) }}"
+  #     group: "{{ item.group | default(omit, true) }}"
+  #   loop: "{{ res_input.list }}"
