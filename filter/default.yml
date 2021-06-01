@@ -1,0 +1,50 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: default sample
+      file:
+        path: /var/tmp/ansible/default/sample
+        state: "{{ state | default('directory') }}"
+
+    - name: false data
+      vars:
+        bool_val: false
+        int_zero: 0
+        str_blank: ''
+        nul_val: null
+        undef_val: undefined
+      debug:
+        msg:
+        - "{{ bool_val | default('hello') }}"
+        - "{{ int_zero | default('hello') }}"
+        - "{{ str_blank | default('hello') }}"
+        - "{{ nul_val | default('hello') }}"
+        - "{{ undef_val | default('hello') }}"
+        - "{{ zzz | default('hello') }}"
+        - "---"
+        - "{{ bool_val | default('hello', true) }}"
+        - "{{ int_zero | default('hello', true) }}"
+        - "{{ str_blank | default('hello', true) }}"
+        - "{{ nul_val | default('hello', true) }}"
+        - "{{ undef_val | default('hello', true) }}"
+        - "{{ zzz | default('hello', true) }}"
+
+#### result
+#### undefinedはそのままなんやな…
+# ok: [localhost] => 
+#   msg:
+#   - false
+#   - '0'
+#   - ''
+#   - ''
+#   - undefined
+#   - hello
+#   - '---'
+#   - hello
+#   - hello
+#   - hello
+#   - hello
+#   - undefined
+#   - hello
