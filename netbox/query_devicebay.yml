@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  vars:
+    netbox_url: http://192.168.0.18:8000/
+    netbox_token: 0123456789abcdef0123456789abcdef01234567
+
+  tasks:
+    - name: query devicebay
+      debug:
+        msg: "{{ query('netbox.netbox.nb_lookup', 'device-bays', api_endpoint=netbox_url, token=netbox_token) }}"
