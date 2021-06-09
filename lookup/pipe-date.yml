@@ -2,8 +2,14 @@
 - hosts: localhost
   gather_facts: true
   gather_subset: min
+  vars:
+    date_str: "{{ lookup('pipe', 'date +%Y/%m/%d_%H:%M:%S.%N') }}"
 
   tasks:
+  - name: print date_str 1
+    debug:
+      msg: '{{ date_str }}'
+
   - name: get date
     vars:
       current_date: "{{ lookup('pipe', 'date +%Y/%m/%d_%H:%M:%S') }}"
@@ -16,3 +22,7 @@
 
   - debug:
       msg: "{{ ansible_date_time }}"
+
+  - name: print date_str 2
+    debug:
+      msg: '{{ date_str }}'
