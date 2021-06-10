@@ -5,3 +5,7 @@
 
 - name: include task
   import_tasks: subtask.yml
+
+# - name: include task
+#   import_tasks: roles/loadcsv/tasks/main.yml
+### taskは実行できるがこのtask内の role_path は "loadcsv"ロール として呼ばれたとき前提なのでcsvファイルは見つからない
