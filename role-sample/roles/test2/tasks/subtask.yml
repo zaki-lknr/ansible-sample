@@ -1,0 +1,6 @@
+---
+- name: this is subtask.yml
+  debug:
+    msg:
+      - "hello subtask"
+      - "{{ role_path }}"
