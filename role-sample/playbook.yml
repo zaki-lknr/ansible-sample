@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  roles:
+  - test1
+  - test2
+  - loadcsv

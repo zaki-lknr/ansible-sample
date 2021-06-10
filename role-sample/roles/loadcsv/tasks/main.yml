@@ -1,0 +1,8 @@
+- name: Read the CSV file
+  read_csv:
+    path: "{{ role_path}}/files/zairyo.csv"
+  register: res_input
+
+- name: print result
+  debug:
+    msg: "{{ res_input }}"

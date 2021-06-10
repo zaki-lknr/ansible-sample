@@ -1,0 +1,8 @@
+---
+- name: sample role
+  debug:
+    msg: "hello world"
+
+- name: register test
+  command: ls
+  register: result
