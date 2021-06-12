@@ -1,0 +1,10 @@
+---
+- hosts: server
+  gather_facts: false
+
+  tasks:
+    - name: exec command
+      command: "{{ item }}"
+      loop:
+        - id
+        - hostname
