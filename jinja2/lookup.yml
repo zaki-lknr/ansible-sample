@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: jinja2 with lookup
+      ansible.builtin.template:
+        src: lookup.j2
+        dest: /var/tmp/ansible-work/template_sample.txt
