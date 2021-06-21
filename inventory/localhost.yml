@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: sample
+      ping:
+
+# Implicit ‘localhost’ — Ansible Documentation
+# https://docs.ansible.com/ansible/latest/inventory/implicit_localhost.html
