@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: lineinfile sample
+      lineinfile:
+        path: lineinfile.txt
+        regexp: '^port: 80'
+        line: 'port: 8080'
+        firstmatch: true  # デフォルトfalse、trueだと最初にヒットした該当行
