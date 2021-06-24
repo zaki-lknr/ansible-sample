@@ -9,3 +9,10 @@
         regexp: '^port: 80'
         line: 'port: 8080'
         firstmatch: true  # デフォルトfalse、trueだと最初にヒットした該当行
+
+    - name: lineinfile add line
+      lineinfile:
+        path: lineinfile.txt
+        regexp: '^file: .*'
+        insertafter: "^port:"   # regexpにマッチしなかったらこの行の次に追加。デフォルトはEOFなのでファイル末尾
+        line: 'file: index.html'
