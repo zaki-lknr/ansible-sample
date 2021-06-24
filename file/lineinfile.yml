@@ -16,3 +16,10 @@
         regexp: '^file: .*'
         insertafter: "^port:"   # regexpにマッチしなかったらこの行の次に追加。デフォルトはEOFなのでファイル末尾
         line: 'file: index.html'
+
+    - name: lineinfile add line BOF
+      lineinfile:
+        path: lineinfile.txt
+        regexp: '^# comment: .*$'
+        insertbefore: BOF   # マッチしない場合はこの行の上に挿入。insertafterと併用不可
+        line: '# comment: write by ansible'
