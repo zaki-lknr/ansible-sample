@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: replace sample
+      ansible.builtin.replace:
+        path: replace01.txt
+        regexp: ^(\s*)AllowOverride .*
+        replace: '\1AllowOverride AuthConfig'
+      # マッチするすべての箇所が更新される
+
+    - name: replace sample
+      ansible.builtin.replace:
+        path: replace02.txt
+        regexp: ^(\s*)AllowOverride .*
+        replace: '\1AllowOverride AuthConfig'
+        after: '<Directory "/var/www">'
+      # afterと一致する行以降のすべてのマッチするすべての箇所が更新される
+
+    - name: replace sample
+      ansible.builtin.replace:
+        path: replace03.txt
+        regexp: ^(\s*)AllowOverride .*
+        replace: '\1AllowOverride AuthConfig'
+        after: '<Directory "/var/www">'
+        before: '</Directory>'
+      # afterと一致する行以降でそこから直近のbeforeまでのすべてのマッチするすべての箇所が更新される
