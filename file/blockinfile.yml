@@ -1,0 +1,31 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: blockinfile sample
+      blockinfile:
+        path: blockinfile01.txt
+        insertbefore: '<IfModule dir_module>'
+        marker_begin: /share/www configure begin
+        marker_end: /share/www configure end
+        marker: '# {mark}'
+        block: |
+          <Directory "/share/www">
+              Options Indexes FollowSymLinks
+              AllowOverride None
+              Require all granted
+          </Directory>
+
+    # ダメな例 (endに指定した文字列は最長一致)
+    - name: blockinfile sample 02
+      blockinfile:
+        path: blockinfile02.txt
+        marker_begin: '<Directory "/var/www">'
+        marker_end: '</Directory>'
+        marker: '{mark}'
+        block: |2
+              Options Indexes hogehoge
+              AllowOverride foobar
+              Require all bazqux
+        # block: "    Options Indexes FollowSymLinksx\n    AllowOverride all\n    Require all grantedx"
