@@ -1,0 +1,44 @@
+- hosts: localhost
+  gather_facts: no
+
+  vars:
+    hosts:
+      - name: web1
+        addr: 192.168.2.10
+        mask: 255.255.255.0
+        pkg:
+          - httpd
+          - php
+          - python
+      - name: web2
+        addr: 192.168.2.11
+        mask: 255.255.255.0
+        pkg:
+          - httpd
+          - ruby
+          - python
+      - addr: 192.168.2.0
+        mask: 255.255.255.0
+        pkg:
+          - php
+        name: dns
+      - name: db1
+        addr: 192.168.2.20
+        mask: 255.255.255.0
+        pkg:
+          - mysql
+          - postgres
+          - php
+      - name: dev
+        addr: 192.168.2.33
+      - name: dev
+        addr: 192.168.2.31
+      - name: dev
+        addr: 192.168.2.32
+      - name: db2
+        addr: 192.168.2.21
+
+  tasks:
+  - name: sort by dictionary's key
+    debug:
+      msg: "{{ hosts | sort(attribute='name,addr') }}"
