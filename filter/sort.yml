@@ -10,6 +10,7 @@
           - httpd
           - php
           - python
+        user: user1
       - name: web2
         addr: 192.168.2.11
         mask: 255.255.255.0
@@ -17,11 +18,13 @@
           - httpd
           - ruby
           - python
+        user: user2
       - addr: 192.168.2.0
         mask: 255.255.255.0
         pkg:
           - php
         name: dns
+        user: user3
       - name: db1
         addr: 192.168.2.20
         mask: 255.255.255.0
@@ -29,16 +32,23 @@
           - mysql
           - postgres
           - php
+        user: user10
       - name: dev
         addr: 192.168.2.33
+        user: user11
       - name: dev
         addr: 192.168.2.31
+        user: user12
       - name: dev
         addr: 192.168.2.32
+        user: user13
       - name: db2
         addr: 192.168.2.21
+        user: user14
 
   tasks:
   - name: sort by dictionary's key
     debug:
-      msg: "{{ hosts | sort(attribute='name,addr') }}"
+      msg:
+      - "{{ hosts | sort(attribute='name,addr') }}"
+      - "{{ hosts | sort(attribute='user') }}"
