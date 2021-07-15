@@ -28,6 +28,10 @@
           - mysql
           - postgres
           - php
+    contain_list:
+      - 192.168.2.20
+      - 192.168.2.10
+      - 192.168.0.89
 
   tasks:
   - name: split filter sample
@@ -37,3 +41,4 @@
       - '{{ hosts | selectattr("name", "defined") | selectattr("name", "eq", "web1") }}'
       - '{{ hosts | selectattr("name", "defined") | selectattr("name", "match", ".*1") }}'
       - '{{ hosts | selectattr("pkg", "contains", "php") }}'
+      - '{{ hosts | selectattr("addr", "in", contain_list) }}'
