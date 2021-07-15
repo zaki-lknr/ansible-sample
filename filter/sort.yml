@@ -52,3 +52,4 @@
       msg:
       - "{{ hosts | sort(attribute='name,addr') }}"
       - "{{ hosts | sort(attribute='user') }}"
+        # これの結果はuser1, user10, user11, ..., user2
