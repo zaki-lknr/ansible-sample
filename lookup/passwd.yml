@@ -1,0 +1,22 @@
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+    create_password: "{{ lookup('password', '/dev/null') }}"
+
+  tasks:
+    - name: create password (1)
+      debug:
+        msg: "{{ create_password }}"
+
+    - name: create password (2)
+      debug:
+        msg: "{{ create_password }}"
+
+    - name: create password
+      set_fact:
+        password: "{{ create_password }}"
+
+    - name: print password
+      debug:
+        msg: "{{ password }}"
