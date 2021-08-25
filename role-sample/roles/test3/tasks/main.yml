@@ -1,0 +1,8 @@
+---
+- name: this is test3
+  debug:
+    msg: "this is test3"
+
+- name: exec other role
+  import_role:
+    name: test2

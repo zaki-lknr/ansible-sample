@@ -6,6 +6,7 @@
   - test1
   - test2
   - loadcsv
+  - test3
 
   # tasks:
   # - import_tasks: roles/test2/tasks/subtask.yml
