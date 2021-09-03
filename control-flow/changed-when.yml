@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: changed_when sample
+      command: ls
+      # changed_when: false
+      changed_when: '"zzz" in result_ls.stdout_lines'
+      # result_ls.stdout_lines に "zzz"が含まれていればchanged
+      register: result_ls
+
+    # - name: debug_print
+    #   debug:
+    #     msg: '{{ result_ls }}'
