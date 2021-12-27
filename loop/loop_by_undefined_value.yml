@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: print
+    debug:
+      msg: "{{ item }}"
+    loop: "{{ zzzzzzzz }}"
+
+#### 実行結果
+# fatal: [localhost]: FAILED! => 
+#   msg: '''zzzzzzzz'' is undefined'
