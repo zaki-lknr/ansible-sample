@@ -1,0 +1,10 @@
+---
+- name: print
+  vars:
+    servers:
+      - web1
+      - web2
+      - db1
+  debug:
+    msg: "user:{{item_user}}, server:{{ item }}"
+  loop: "{{ servers }}"
