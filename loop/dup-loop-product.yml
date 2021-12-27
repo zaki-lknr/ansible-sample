@@ -1,0 +1,31 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: print
+    vars:
+      users:
+        - user1
+        - user2
+      servers:
+        - web1
+        - web2
+        - db1
+    debug:
+      msg: "user: {{ item[0] }}, server: {{ item[1] }}"
+    loop: "{{ users | product(servers) }}"
+
+#### 実行結果
+# ok: [localhost] => (item=['user1', 'web1']) => 
+#   msg: 'user: user1, server: web1'
+# ok: [localhost] => (item=['user1', 'web2']) => 
+#   msg: 'user: user1, server: web2'
+# ok: [localhost] => (item=['user1', 'db1']) => 
+#   msg: 'user: user1, server: db1'
+# ok: [localhost] => (item=['user2', 'web1']) => 
+#   msg: 'user: user2, server: web1'
+# ok: [localhost] => (item=['user2', 'web2']) => 
+#   msg: 'user: user2, server: web2'
+# ok: [localhost] => (item=['user2', 'db1']) => 
+#   msg: 'user: user2, server: db1'
