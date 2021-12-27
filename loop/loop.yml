@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: print
+    debug:
+      msg: "{{ item.vid }}"
+    loop:
+    - vid: 1ループ目のvid
+      address: 1ループ目のaddress
+    - vid: 2ループ目のvid
+      address: 2ループ目のaddress
+
