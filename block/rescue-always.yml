@@ -1,0 +1,32 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - always:
+        # 最後に必ず実行される
+        - name: always task 1
+          debug:
+            msg: always task 1
+      block:
+        # 初めに実行される
+        - name: sample task 1
+          debug:
+            msg: sample task 1
+
+        - name: failed task
+          fail:
+            msg: failed task
+          when: failed_value is defined
+          # タスク失敗が発生すると rescue に処理が移る
+
+        - name: sample task 3
+          debug:
+            msg: sample task 3
+
+      rescue:
+        # block内でタスク失敗が発生するとここにくる
+        - name: rescue task 1
+          debug:
+            msg: rescue task 1
+
