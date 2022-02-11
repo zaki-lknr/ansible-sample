@@ -1,0 +1,12 @@
+- hosts: localhost
+  gather_facts: false
+  vars:
+    # sample_text: "could not found: foobar"
+    sample_text: "zzz"
+
+  tasks:
+  - name: assert
+    assert:
+      that:
+      - 'sample_text | regex_search("could not found: foobar")'
+      # - sample_text | regex_search("could not found: foobar")
