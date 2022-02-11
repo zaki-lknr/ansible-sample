@@ -7,13 +7,14 @@
       hoge: "zzz"
       foo: "bar"
       baz: False
-    assert:
+    ansible.builtin.assert:
       that:
       - "hoge is defined"
       - foo is defined
       - baz is defined and baz
+      fail_msg: "'hoge','bar' must be defined, 'baz' must be true"
     register: assert_result
-    ignore_errors: true
+    # ignore_errors: true
 
     # ↑ bazは定義されているが評価するとfalseになるためassertは失敗する
     # ansible-playbook で -e baz=hogehoge とか付与すれば通る
