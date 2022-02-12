@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - debug:
+      msg: "{{ item }}"
+    loop: [1, 2, 3, 4, 5]
+
+  - set_fact:
+      set_fact_value: "{{ item }}"
+    loop: [1, 2, 3, 4, 5]
+    # fact変数は上書きされる
+
+  - debug:
+      msg: "{{ set_fact_value }}"
