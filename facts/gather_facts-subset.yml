@@ -1,0 +1,10 @@
+---
+- hosts: all
+  gather_facts: true
+  gather_subset:
+    - min
+
+  tasks:
+  - debug:
+      msg: "{{ ansible_facts }}"
+      # msg: "{{ hostvars[inventory_hostname] }}"
