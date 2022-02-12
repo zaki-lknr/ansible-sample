@@ -1,0 +1,50 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: set_fact value
+      set_fact:
+        str_value: aiueo
+      register: result
+
+    - name:
+      debug:
+        msg:
+        - "{{ str_value }}"
+        - "{{ result }}"
+      #### result は以下のとおり
+        # msg:
+        # - aiueo
+        # - ansible_facts:
+        #     str_value: aiueo
+        #   changed: false
+        #   failed: false
+
+    - name: set_fact list value
+      vars:
+        list_values:
+        - item1
+        - item2
+        - item3
+      set_fact:
+        list_items: "{{ list_items|default([]) + [item] }}"
+        list_item: "{{ [item] }}"
+      loop: "{{ list_values }}"
+      register: loop_result
+
+    - name: print loop facts
+      debug:
+        msg:
+        - "{{ list_item }}"
+        - "{{ loop_result }}"
+
+    - name: result + attr
+      debug:
+        msg: "{{ item }}"   # <- itemはloopのたびに上書きセットしてるのでitem3のみ。
+      # loop: "{{ loop_result.results | map(attribute='ansible_facts.list_item') }}"
+      loop: "{{ loop_result.results | map(attribute='ansible_facts.list_item') | flatten }}"
+
+    - name: print list_items
+      debug:
+        msg: "{{ list_items }}"
