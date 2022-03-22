@@ -1,0 +1,22 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - set_fact:
+      sample_val: {}
+      # {} が無い状態で値がnullの場合はupdate_factで新しいキーを追加することはできない
+      # fatal: [localhost]: FAILED! => {"changed": false, "msg": "update_fact can only modify mutable objects."}
+
+  - ansible.utils.update_fact:
+      updates:
+      - path: sample_val.key1
+        value: 123
+    register: update_fact
+
+  - debug:
+      var: update_fact
+      # これはupdateされた情報
+  - debug:
+      var: sample_val
+      # 元のsample_valは変化無し
