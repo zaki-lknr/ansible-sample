@@ -3,6 +3,11 @@
   gather_facts: false
 
   tasks:
+    - name: date
+      ansible.builtin.debug:
+        # msg: "{{ ('2023-08-29 09:12:51' | ansible.builtin.to_datetime('%Y-%m-%d %H:%M:%S')).timestamp() + 60*60*24*5 }}"
+        # msg: "{{ '%Y-%m-%d %H:%M:%S' | ansible.builtin.strftime(('2023-08-29 09:12:51' | ansible.builtin.to_datetime('%Y-%m-%d %H:%M:%S')).timestamp() + 60*60*24*5) }}"
+        msg: "{{ '2023-08-29 09:12:51' | add_days('%Y-%m-%d %H:%M:%S', 5) }}"
     - name: to_datetime
       vars:
         str_sample: "2016-08-14 20:00:12"
@@ -15,7 +20,7 @@
           - "{{ str_sample | to_datetime }}"
           - "{{ str_year | to_datetime('%Y') }}"
           - "{{ str_ymdhms | to_datetime('%Y.%m.%d %H-%M-%S') }}"
-          - "{{ str_jst | to_datetime('%a %b %d %H:%M:%S %Z %Y') }}"
-          - "{{ str_offset | to_datetime('%a %b %d %H:%M:%S %z %Y') }}"
-          - "{{ (str_jst | to_datetime('%a %b %d %H:%M:%S %Z %Y')).timestamp() }}"  # 型はfloat ('1612916228.0')
+          # - "{{ str_jst | to_datetime('%a %b %d %H:%M:%S %Z %Y') }}"
+          # - "{{ str_offset | to_datetime('%a %b %d %H:%M:%S %z %Y') }}"
+          # - "{{ (str_jst | to_datetime('%a %b %d %H:%M:%S %Z %Y')).timestamp() }}"  # 型はfloat ('1612916228.0')
           - "{{ lookup('pipe', 'date +%s') }}"
