@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: format filter
+    debug:
+      msg: "{{ 'curry_%03d' | format(item) }}"
+    loop: "{{ range(1, 50) }}"
