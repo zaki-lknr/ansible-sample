@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  gather_facts: false
+  become: true
+
+  tasks:
+  - shell: id
+
+  - shell: id
+    become: false
