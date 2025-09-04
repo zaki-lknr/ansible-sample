@@ -1,0 +1,20 @@
+---
+- name: sample
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+  # - include_tasks:
+  #     file: roles/sample/tasks/main.yml
+  ### include_tasksだとroleと認識しないためrole varsなどは認識しない
+  # - import_tasks:
+  #     file: roles/sample/tasks/main.yml
+  #   vars:
+  #     default_value: zzz
+  #     curry: aaa
+
+  - include_role:
+      name: sample
+
+  # - import_role:
+  #     name: sample

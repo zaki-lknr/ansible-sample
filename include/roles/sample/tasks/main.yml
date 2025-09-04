@@ -1,0 +1,6 @@
+---
+- debug:
+    msg: "hello world {{ default_value }}"
+
+- debug:
+    msg: "hello world {{ curry }}"
