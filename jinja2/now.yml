@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: print current date
+    debug:
+      msg:
+      - "current(local): {{ now() }}"
+      - "current(utc):   {{ now(true) }}"
+      - "formatted:      {{ now(false, '%Y-%m-%d %H-%M-%S') }}"
