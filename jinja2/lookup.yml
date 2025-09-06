@@ -1,6 +1,11 @@
 ---
 - hosts: localhost
   gather_facts: false
+  vars:
+    values:
+      key1: val1
+      key2: val2
+    keyname: key2
 
   tasks:
     - name: jinja2 with lookup
