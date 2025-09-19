@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: get template
+      debug:
+        msg: "{{ item }}"
+      loop: "{{ lookup('awx.awx.controller_api', 'job_templates') }}"
