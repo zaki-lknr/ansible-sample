@@ -7,11 +7,18 @@
   - ansible.platform
 
   tasks:
-  - name: create host
+  - name: create user
     ansible.platform.user:
       username: "{{ username }}"
       password: "{{ password }}"
       email: "{{ email }}"
-      organizations: "{{ organization }}"
+      # organizations: "{{ organization }}"
       is_superuser: false
-      is_platform_auditor: false
+      # is_platform_auditor: false
+
+  - name: update user role
+    ansible.platform.role_user_assignment:
+      user: "{{ username }}"
+      role_definition: Organization Member
+      object_ids:
+      - "{{ organization }}"
