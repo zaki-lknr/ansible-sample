@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  gather_facts: false
+  name: AAP sample
+
+  collections:
+  - ansible.platform
+
+  tasks:
+  - name: create host
+    ansible.platform.user:
+      username: "{{ username }}"
+      password: "{{ password }}"
+      email: "{{ email }}"
+      organization: "{{ organization }}"
+      is_superuser: false
+      is_system_auditor: false
