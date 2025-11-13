@@ -12,6 +12,6 @@
       username: "{{ username }}"
       password: "{{ password }}"
       email: "{{ email }}"
-      organization: "{{ organization }}"
+      organizations: "{{ organization }}"
       is_superuser: false
-      is_system_auditor: false
+      is_platform_auditor: false
