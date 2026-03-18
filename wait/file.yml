@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+
+  - ansible.builtin.wait_for:
+      path: /var/tmp/zzz
+      state: present
+      # state: absent
+      delay: 5
+      timeout: 30
