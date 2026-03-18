@@ -1,0 +1,45 @@
+---
+- name: keycloak initialize
+  hosts: all
+  gather_facts: false
+
+  tasks:
+  - name: create user
+    community.general.keycloak_user:
+      auth_keycloak_url: "{{ keycloak_url }}"
+      auth_username: "{{ keycloak_init_username }}"
+      auth_password: "{{ keycloak_init_password }}"
+      auth_realm: master
+      validate_certs: false
+
+      realm: master
+      username: "{{ keycloak_new_adminuser }}"
+      enabled: true
+      credentials:
+      - type: password
+        value: "{{ keycloak_new_adminpass }}"
+        temporary: false
+    register: user_data
+
+  - name: mapping role
+    community.general.keycloak_user_rolemapping:
+      auth_keycloak_url: "{{ keycloak_url }}"
+      auth_username: "{{ keycloak_init_username }}"
+      auth_password: "{{ keycloak_init_password }}"
+      auth_realm: master
+      validate_certs: false
+
+      # uid: "{{ user_data.existing.id }}"
+      target_username: "{{ keycloak_new_adminuser }}"
+      roles:
+      - name: admin
+
+  - name: create new realm
+    community.general.keycloak_realm:
+      auth_keycloak_url: "{{ keycloak_url }}"
+      auth_username: "{{ keycloak_new_adminuser }}"
+      auth_password: "{{ keycloak_new_adminpass }}"
+      auth_realm: master
+      validate_certs: false
+
+      realm: "{{ my_realm }}"
