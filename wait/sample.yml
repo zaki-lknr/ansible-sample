@@ -1,0 +1,14 @@
+---
+- hosts: all
+  gather_facts: false
+
+  tasks:
+
+  - ansible.builtin.wait_for:
+      host: "{{ ansible_host }}"
+      port: "{{ port }}"
+      delay: 5
+      # state: stopped
+      state: started
+      timeout: 30
+    delegate_to: localhost
