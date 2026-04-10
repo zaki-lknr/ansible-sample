@@ -48,7 +48,8 @@
       csr: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.csr"
       dest: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.crt"
       #acme_directory: https://acme-v01.api.letsencrypt.org/directory    ### 403 error
-      acme_directory: https://acme-v02.api.letsencrypt.org/directory
+      validate_certs: "{{ validate_certs }}"
+      acme_directory: "{{ acme_directory }}"
       acme_version: 2
       terms_agreed: true
       # Renew if the certificate is at least 30 days old
@@ -72,7 +73,8 @@
 
   - name: Let the challenge be validated and retrieve the cert and intermediate certificate
     community.crypto.acme_certificate:
-      acme_directory: https://acme-v02.api.letsencrypt.org/directory
+      validate_certs: "{{ validate_certs }}"
+      acme_directory: "{{ acme_directory }}"
       acme_version: 2
       terms_agreed: true
       account_key_src: "/etc/pki/tls/certs/{{ server_fqdn }}/account.key"
