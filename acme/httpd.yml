@@ -22,6 +22,16 @@
   #     name: ssl
   # ^^^ require "a2enmod" but not found on yum/rpm linux
 
+  - name: permit traffic in default zone for https/http
+    ansible.posix.firewalld:
+      service: "{{ item }}"
+      permanent: true
+      immediate: true
+      state: enabled
+    with_items:
+      - https
+      - http
+
   - name: start httpd
     service:
       name: httpd
@@ -99,14 +109,13 @@
       - key: SSLCertificateKeyFile
         file: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.key"
 
-  - name: permit traffic in default zone for https/http
+  - name: prohibit traffic in default zone for http
     ansible.posix.firewalld:
       service: "{{ item }}"
       permanent: true
       immediate: true
-      state: enabled
+      state: disabled
     with_items:
-      - https
       - http
 
   - name: restart httpd
