@@ -28,7 +28,7 @@
       permanent: true
       immediate: true
       state: enabled
-    with_items:
+    loop:
       - https
       - http
 
@@ -103,7 +103,7 @@
       path: /etc/httpd/conf.d/ssl.conf
       regexp: "^{{ item.key }}.*"
       replace: "{{ item.key }} {{ item.file }}"
-    with_items:
+    loop:
       - key: SSLCertificateFile
         file: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.crt"
       - key: SSLCertificateKeyFile
@@ -115,7 +115,7 @@
       permanent: true
       immediate: true
       state: disabled
-    with_items:
+    loop:
       - http
 
   - name: restart httpd
