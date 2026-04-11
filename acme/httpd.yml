@@ -22,6 +22,12 @@
   #     name: ssl
   # ^^^ require "a2enmod" but not found on yum/rpm linux
 
+  - name: start httpd
+    service:
+      name: httpd
+      state: started
+      enabled: true
+
   - name: create directory
     file:
       state: directory
@@ -103,7 +109,7 @@
       - https
       - http
 
-  - name: start httpd
+  - name: restart httpd
     service:
       name: httpd
       state: restarted
