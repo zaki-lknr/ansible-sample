@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - debug:
+      msg: "{{ lookup('file', 'sample.file') | b64encode}}"
