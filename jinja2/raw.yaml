@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - copy:
+      content: |
+        {% raw %}{{ username }}
+        {{ password }}{% endraw %}
+      dest: temp.txt
