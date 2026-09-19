@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - template:
+      src: template.txt.j2
+      dest: output.txt
+    vars:
+      value: zzz
