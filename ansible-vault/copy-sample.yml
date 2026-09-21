@@ -1,0 +1,10 @@
+---
+- name: sample module test
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - zaki_lknr.sample.copy:
+      # src: sample.txt
+      src: template.txt.j2
+      dest: /var/tmp/ansible-sample.txt
