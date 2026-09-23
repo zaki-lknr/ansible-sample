@@ -9,18 +9,32 @@
     debug:
       msg: start ansible!
 
+  - name: gathering OS type
+    ansible.builtin.setup:
+      filter:
+        - ansible_os_family
+
   - name: install httpd
     yum:
       name:
         - httpd
         - mod_ssl
+        - python3-cryptography  # for openssl_privatekey
       state: present
+    when: ansible_facts.os_family == "RedHat"
 
-  # - name: enable ssl
-  #   community.general.apache2_module:
-  #     state: present
-  #     name: ssl
-  # ^^^ require "a2enmod" but not found on yum/rpm linux
+  - name: install httpd
+    apt:
+      name:
+        - apache2
+      state: present
+    when: ansible_facts.os_family == "Debian"
+
+  - name: enable ssl
+    community.general.apache2_module:
+      state: present
+      name: ssl
+    when: ansible_facts.os_family == "Debian"
 
   - name: permit traffic in default zone for https/http
     ansible.posix.firewalld:
@@ -31,6 +45,7 @@
     loop:
       - https
       - http
+    when: ansible_facts.os_family == "RedHat"
 
   - name: start httpd
     service:
@@ -100,9 +115,17 @@
 
   - name: replace ssl.conf configure
     replace:
-      path: /etc/httpd/conf.d/ssl.conf
-      regexp: "^{{ item.key }}.*"
-      replace: "{{ item.key }} {{ item.file }}"
+      # path: /etc/httpd/conf.d/ssl.conf                    # for RHEL
+      # path: /etc/apache2/sites-available/default-ssl.conf # for Debian
+      path: >-
+        {%- if ansible_facts.os_family == "RedHat" -%}
+        /etc/httpd/conf.d/ssl.conf
+        {%- else -%}
+        /etc/apache2/sites-available/default-ssl.conf
+        {%- endif -%}
+
+      regexp: "^(\\s*{{ item.key }}).*"
+      replace: "\\1 {{ item.file }}"
     loop:
       - key: SSLCertificateFile
         file: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.crt"
@@ -117,6 +140,15 @@
       state: disabled
     loop:
       - http
+    when: ansible_facts.os_family == "RedHat"
+
+  - name: enable ssl site
+    ansible.builtin.file:
+      state: link
+      src: /etc/apache2/sites-available/default-ssl.conf
+      dest: /etc/apache2/sites-enabled/default-ssl.conf
+    when: ansible_facts.os_family == "Debian"
+    # a2ensite実行相当の処理 (モジュールが無い)
 
   - name: restart httpd
     service:
