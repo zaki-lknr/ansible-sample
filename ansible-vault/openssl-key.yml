@@ -1,0 +1,37 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  # - name: create server key
+  #   community.crypto.openssl_privatekey:
+  #     path: "server.key"
+  # # このタスクで生成したserver.keyをansible-vaultで暗号化して以降のタスクを試す
+
+  - name: create csr
+    community.crypto.openssl_csr:
+      path: "server.csr"
+      privatekey_path: "server.key"
+      common_name: www.example.org
+      # これはAnsible Vaultで暗号化されてるとNG
+      # ※ passphraseでガードされてると認識される
+      # Wrong passphrase provided for private key
+
+  - name: Create a challenge for {{ server_fqdn }} using a account key file.
+    community.crypto.acme_certificate:
+      account_key_src: "server.key"
+      account_email: "user@example.org"
+      csr: "server.csr"
+      dest: "server.crt"
+      validate_certs: false
+      acme_directory: https://acme-v02.api.letsencrypt.org/directory
+      acme_version: 2
+      terms_agreed: true
+      # Renew if the certificate is at least 30 days old
+      remaining_days: 60
+      # これもAnsible Vaultで暗号化されてるとNG
+      # msg: 'Error while parsing account key: error while loading key: (''Could not deserialize
+      #     key data. The data may be in an incorrect format, the provided password may be
+      #     incorrect, it may be encrypted with an unsupported algorithm, or it may be an
+      #     unsupported key type (e.g. EC curves with explicit parameters).'', [<OpenSSLError(code=503841036,
+      #     lib=60, reason=524556, reason_text=unsupported)>])'
