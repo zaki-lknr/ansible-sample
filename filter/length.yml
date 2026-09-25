@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+    list_sample: ["foo", "bar", "baz", 1, 2, 3]
+
+  tasks:
+  - name: length filter sample
+    debug:
+      msg: "{{ list_sample | length }}"
