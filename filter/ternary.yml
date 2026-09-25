@@ -30,3 +30,19 @@
               }}"
       # 入れ子にせずに、defaultフィルタを併用。ピタゴラスイッチ感。
       # if-elsif-else っぽく見せるインデント難しい
+
+    - name: 動作切り替えフラグ設定
+      vars:
+        # only_check: true
+      ansible.builtin.set_fact:
+        # local_value: "{{ (sample_value2 == 2) | ternary(true, false) }}"
+        _check_mode_val: "{{ only_check | default(true) }}"
+        _render_state: "{{ only_check | default(true) | ternary('rendered', 'merge') }}"
+    - debug:
+        msg:
+        - "{{ _check_mode_val }}"
+        - "{{ _render_state }}"
+        # - "{{ aaa }}"
+
+    - debug:
+        var: _check_mode_val
