@@ -1,0 +1,77 @@
+---
+- hosts: all
+  #gather_facts: true
+  gather_facts: false
+  become: true
+
+  tasks:
+  - name: debug
+    debug:
+      msg: start ansible!
+
+  - name: create directory
+    file:
+      state: directory
+      path: "/etc/pki/tls/certs/{{ server_fqdn }}"
+
+  - name: create account private key
+    community.crypto.openssl_privatekey:
+      path: "/etc/pki/tls/certs/{{ server_fqdn }}/account.key"
+
+  - name: create server key
+    community.crypto.openssl_privatekey:
+      path: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.key"
+
+  - name: create csr
+    community.crypto.openssl_csr:
+      path: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.csr"
+      privatekey_path: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.key"
+      common_name: "{{ server_fqdn }}"
+
+  - name: Create a challenge for {{ server_fqdn }} using a account key file.
+    community.crypto.acme_certificate:
+      account_key_src: "/etc/pki/tls/certs/{{ server_fqdn }}/account.key"
+      account_email: "{{ email }}"
+      csr: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.csr"
+      dest: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.crt"
+      validate_certs: "{{ validate_certs }}"
+      challenge: dns-01
+      acme_directory: "{{ acme_directory }}"
+      acme_version: 2
+      terms_agreed: true
+      remaining_days: 60
+    register: acme_challenge
+
+  - name: dump acme_challenge
+    debug:
+      msg: "{{ acme_challenge }}"
+
+  - name: add TXT record to dns server
+    copy:
+      dest: "/etc/dnsmasq.d/{{ server_fqdn }}.conf"
+      content: |
+        txt-record={{ record }},"{{ value }}"
+    vars:
+        record: "{{ acme_challenge.challenge_data[server_fqdn]['dns-01'].record }}"
+        value:  "{{ acme_challenge.challenge_data[server_fqdn]['dns-01'].resource_value }}"
+    delegate_to: "{{ dns_delegate_host }}"
+    become: "{{ dns_delegate_become }}"
+
+  - name: restart DNS server
+    systemd:
+      name: dnsmasq.service
+      state: restarted
+    delegate_to: "{{ dns_delegate_host }}"
+    become: "{{ dns_delegate_become }}"
+
+  - name: Let the challenge be validated and retrieve the cert and intermediate certificate
+    community.crypto.acme_certificate:
+      validate_certs: "{{ validate_certs }}"
+      challenge: dns-01
+      acme_directory: "{{ acme_directory }}"
+      acme_version: 2
+      terms_agreed: true
+      account_key_src: "/etc/pki/tls/certs/{{ server_fqdn }}/account.key"
+      csr: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.csr"
+      dest: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.crt"
+      data: "{{ acme_challenge }}"
