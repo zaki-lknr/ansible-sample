@@ -55,6 +55,7 @@
         record: "{{ acme_challenge.challenge_data[server_fqdn]['dns-01'].record }}"
         value:  "{{ acme_challenge.challenge_data[server_fqdn]['dns-01'].resource_value }}"
     delegate_to: "{{ dns_delegate_host }}"
+    run_once: true
     become: "{{ dns_delegate_become }}"
 
   - name: restart DNS server
@@ -62,6 +63,7 @@
       name: dnsmasq.service
       state: restarted
     delegate_to: "{{ dns_delegate_host }}"
+    run_once: true
     become: "{{ dns_delegate_become }}"
 
   - name: Let the challenge be validated and retrieve the cert and intermediate certificate
