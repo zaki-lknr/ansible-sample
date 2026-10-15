@@ -18,6 +18,23 @@
     community.crypto.openssl_privatekey:
       path: "/etc/pki/tls/certs/{{ server_fqdn }}/account.key"
 
+  - name: binding account eab
+    community.crypto.acme_account:
+      account_key_src: "/etc/pki/tls/certs/{{ server_fqdn }}/account.key"
+      acme_version: 2
+      acme_directory: "{{ acme_directory }}"
+      validate_certs: "{{ validate_certs }}"
+      state: present
+      allow_creation: true
+      terms_agreed: true
+      contact:
+        - "mailto:{{ email }}"
+      external_account_binding:
+        kid: "{{ eab_kid }}"
+        key: "{{ eab_key }}"
+        alg: "{{ eab_alg }}"
+    register: account_created_eab
+
   - name: create server key
     community.crypto.openssl_privatekey:
       path: "/etc/pki/tls/certs/{{ server_fqdn }}/{{ server_fqdn }}.key"
