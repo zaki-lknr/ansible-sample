@@ -1,0 +1,13 @@
+---
+- hosts: all
+  gather_facts: false
+
+  tasks:
+  - ansible.builtin.gather_facts:
+      gather_subset:
+        # - min
+        - network
+
+  - ansible.builtin.debug:
+      msg: "{{ ansible_facts }}"
+      # msg: "{{ hostvars[inventory_hostname] }}"
